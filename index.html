@@ -126,7 +126,6 @@
       <div class="row" style="justify-content:space-between; align-items:flex-end">
         <label for="txtLinks" style="margin:0">ألصق الروابط</label>
         <div class="row">
-          <button id="btnCsvTemplate" class="btn" type="button">تنزيل قالب CSV</button>
           <button id="btnClear" class="btn" type="button">مسح</button>
         </div>
       </div>
@@ -206,7 +205,6 @@ const escapeXml = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 const txtLinks = $('#txtLinks');
 const fileInput = $('#fileInput');
 const drop = $('#drop');
-const btnCsvTemplate = $('#btnCsvTemplate');
 const btnClear = $('#btnClear');
 const btnZip = $('#btnZip');
 const btnCopyIndex = $('#btnCopyIndex');
@@ -222,12 +220,6 @@ const debounce = (fn,ms=150)=>{ clearTimeout(debounceTimer); debounceTimer=setTi
 
 txtLinks.addEventListener('input', ()=> debounce(updateAll));
 btnClear.addEventListener('click', ()=>{ txtLinks.value=''; delete txtLinks.dataset.uploadContent; delete txtLinks.dataset.uploadName; updateAll(); });
-
-/* ---- قالب CSV: عمود url فقط + 5 صفوف فارغة ---- */
-btnCsvTemplate.addEventListener('click', ()=>{
-  const csv = ['url','','','','',''].join('\n');
-  downloadBlob(new Blob([csv],{type:'text/csv;charset=utf-8'}), 'sitemap-template.csv');
-});
 
 /* ---- رفع CSV/JSON ---- */
 fileInput.addEventListener('change', e=> handleFiles(e.target.files));
