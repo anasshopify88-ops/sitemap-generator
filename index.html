@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>آداة منشئ خريطة الموقع (Sitemap) المجانية</title>
+<style>
+  :root{
+    --bg:#f7fafc;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --border:#e2e8f0;
+    --primary:#2563eb;
+    --radius:14px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    --focus: 0 0 0 3px rgba(37,99,235,.25);
+    --danger:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; font-family:system-ui, Arial, Helvetica, sans-serif; color:var(--text); background:var(--bg)}
+  a{color:var(--primary); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .container{max-width:900px; margin:0 auto; padding:18px}
+  .topbar{display:flex; gap:8px; margin-bottom:10px}
+  .btn{
+    background:#fff; border:1px solid var(--border); color:var(--text);
+    border-radius:10px; padding:8px 12px; cursor:pointer; text-decoration:none; display:inline-block;
+  }
+  .btn.primary{background:linear-gradient(180deg,#eef2ff,#e0e7ff); border-color:#c7d2fe}
+  .btn.ok{background:linear-gradient(180deg,#ecfdf5,#d1fae5); border-color:#a7f3d0}
+  .btn.home{background:#000; color:#fff; border-color:#000}
+  .btn:disabled{opacity:.6; cursor:not-allowed}
+
+  header.hero{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:14px; margin-bottom:12px;
+  }
+  .hero-grid{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:center}
+
+  /* الصورة: دائرية + contain = بدون أي قص */
+  .avatar{
+    width:92px; height:92px; border-radius:50%; overflow:hidden;
+    border:1px solid var(--border); background:#fff; display:grid; place-items:center;
+  }
+  .avatar img{
+    width:100%; height:100%;
+    object-fit:contain;      /* تُظهر الصورة كاملة داخل الدائرة */
+    object-position:center;  /* تمركز داخل الدائرة */
+    border-radius:50%;
+    display:block;
+  }
+  .avatar--placeholder{
+    font-weight:700; font-size:14px; color:#64748b;
+  }
+
+  .hero-info h1{margin:0; font-size:22px}
+  .hero-info .notice{margin:6px 0 0; font-size:12px; color:var(--danger)}
+  .hero-info .notice a{color:var(--danger); text-decoration:underline}
+
+  .panel{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:12px; margin-bottom:12px;
+  }
+  label{display:block; font-size:14px; margin-bottom:6px}
+  textarea{
+    width:100%; background:#fff; color:var(--text); border:1px solid var(--border);
+    border-radius:10px; padding:10px 12px; outline:none;
+    min-height:140px; resize:vertical; font-family:var(--mono); line-height:1.55
+  }
+  input[type="file"]{
+    width:100%; background:#fff; color:var(--text); border:1px solid var(--border);
+    border-radius:10px; padding:10px 12px; outline:none;
+  }
+  textarea:focus,input[type="file"]:focus{box-shadow:var(--focus)}
+  .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .grid{display:grid; gap:10px}
+
+  .summary{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
+  .card-mini{background:#fff; border:1px solid var(--border); border-radius:10px; padding:10px}
+  .card-mini .k{font-size:12px; color:var(--muted)}
+  .card-mini .v{font-weight:700; font-size:18px}
+
+  .code{
+    background:#fff; border:1px solid var(--border); border-radius:10px; padding:10px; overflow:auto;
+    font-family:var(--mono); white-space:pre; line-height:1.5; max-height:300px;
+  }
+  .hl .tag{color:#0ea5e9}
+  .hl .attr{color:#ef4444}
+  .hl .val{color:#059669}
+  .hl .cm{color:#94a3b8}
+
+  .links-list a{display:inline-block; margin:.2rem .4rem; font-size:13px}
+  .errors{background:#fff1f2; border:1px solid #fecdd3; color:#b91c1c; border-radius:10px; padding:10px; margin-top:8px; display:none}
+  .drop{
+    border:2px dashed var(--border); border-radius:12px; padding:14px; text-align:center; color:#94a3b8;
+  }
+  .drop.drag{border-color:#06b6d4; background:#f0fdff; color:#0e7490}
+</style>
+</head>
+<body>
+  <div class="container">
+    <!-- أزرار تنقل علوية -->
+    <nav class="topbar">
+      <button class="btn" type="button" onclick="history.back()">رجوع</button>
+      <a class="btn home" href="https://anasrashed.com" rel="noopener">الرئيسية</a>
+    </nav>
+
+    <!-- البطل -->
+    <header class="hero">
+      <div class="hero-grid">
+        <div class="avatar" id="avatar">
+          <!-- صورة مباشرة من Imgur تُعرض كاملة داخل دائرة بدون قص -->
+          <img id="avatarImg" alt="صورة أنس راشد" width="92" height="92" decoding="async" loading="lazy"/>
+        </div>
+        <div class="hero-info">
+          <h1>آداة منشئ خريطة الموقع (Sitemap) المجانية</h1>
+          <p class="notice">اذا باقتك بلس، اطلب خدمة رفع خريطة المتجر في Google Search Console <a href="https://anasrashed.com/ZqyGaBZ" rel="noopener">من هنا</a></p>
+        </div>
+      </div>
+    </header>
+
+    <!-- إدخال -->
+    <section class="panel">
+      <div class="row" style="justify-content:space-between; align-items:flex-end">
+        <label for="txtLinks" style="margin:0">ألصق الروابط</label>
+        <div class="row">
+          <button id="btnCsvTemplate" class="btn" type="button">تنزيل قالب CSV</button>
+          <button id="btnClear" class="btn" type="button">مسح</button>
+        </div>
+      </div>
+
+      <textarea id="txtLinks" placeholder="اضف روابطك هنا."></textarea>
+
+      <div class="grid" style="margin-top:10px">
+        <div>
+          <label for="fileInput">أو ارفع CSV/JSON</label>
+          <input id="fileInput" type="file" accept=".csv,.json,application/json,text/csv"/>
+          <div id="drop" class="drop" style="margin-top:8px">اسحب وأفلِت الملف هنا أو انقر للاختيار</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- المعاينة والتنزيل -->
+    <section class="panel">
+      <div class="row" style="justify-content:space-between">
+        <h3 style="margin:6px 0 10px">المعاينة</h3>
+        <div class="row">
+          <button id="btnCopyIndex" class="btn primary" type="button" disabled>نسخ sitemap_index.xml</button>
+          <button id="btnZip" class="btn ok" type="button" disabled>تنزيل جميع الخرائط كـ ZIP</button>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="card-mini"><div class="k">الروابط بعد التنظيف</div><div id="sumCount" class="v">0</div></div>
+        <div class="card-mini"><div class="k">عدد ملفات الخرائط</div><div id="sumFiles" class="v">0</div></div>
+        <div class="card-mini"><div class="k">الحجم التقريبي</div><div id="sumSize" class="v">0 KB</div></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px">
+        <div>
+          <label>مقتطف XML</label>
+          <div id="code" class="code hl" aria-live="polite"></div>
+        </div>
+        <div>
+          <label>تنزيل فردي</label>
+          <div id="links" class="links-list">لا يوجد ملفات بعد.</div>
+          <div id="errors" class="errors" role="alert"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+/* -------- إعداد صورة Imgur بدون قص، داخل دائرة -------- */
+(function initAvatar(){
+  const IMGUR_ID = 'B3UkEQ0';
+  const candidates = [
+    `https://i.imgur.com/${IMGUR_ID}.webp`,
+    `https://i.imgur.com/${IMGUR_ID}.jpg`,
+    `https://i.imgur.com/${IMGUR_ID}.png`
+  ];
+  const img = document.getElementById('avatarImg');
+  const avatar = document.getElementById('avatar');
+  let i = 0;
+
+  function tryNext(){
+    if(i >= candidates.length){
+      // فشل التحميل: أظهر بادج بديل (بدون قص)
+      avatar.classList.add('avatar--placeholder');
+      avatar.innerHTML = 'AR';
+      return;
+    }
+    img.src = candidates[i++];
+  }
+  img.addEventListener('error', tryNext);
+  tryNext();
+})();
+
+/* ================= منطق الأداة (نفس السلوك السابق المبسّط) ================= */
+const $ = s=>document.querySelector(s);
+const toBytes = s => new TextEncoder().encode(s);
+const escapeXml = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+
+const txtLinks = $('#txtLinks');
+const fileInput = $('#fileInput');
+const drop = $('#drop');
+const btnCsvTemplate = $('#btnCsvTemplate');
+const btnClear = $('#btnClear');
+const btnZip = $('#btnZip');
+const btnCopyIndex = $('#btnCopyIndex');
+const sumCount = $('#sumCount');
+const sumFiles = $('#sumFiles');
+const sumSize = $('#sumSize');
+const code = $('#code');
+const links = $('#links');
+const errorsBox = $('#errors');
+
+let debounceTimer=null;
+const debounce = (fn,ms=150)=>{ clearTimeout(debounceTimer); debounceTimer=setTimeout(fn,ms); };
+
+txtLinks.addEventListener('input', ()=> debounce(updateAll));
+btnClear.addEventListener('click', ()=>{ txtLinks.value=''; delete txtLinks.dataset.uploadContent; delete txtLinks.dataset.uploadName; updateAll(); });
+
+/* ---- قالب CSV: عمود url فقط + 5 صفوف فارغة ---- */
+btnCsvTemplate.addEventListener('click', ()=>{
+  const csv = ['url','','','','',''].join('\n');
+  downloadBlob(new Blob([csv],{type:'text/csv;charset=utf-8'}), 'sitemap-template.csv');
+});
+
+/* ---- رفع CSV/JSON ---- */
+fileInput.addEventListener('change', e=> handleFiles(e.target.files));
+['dragenter','dragover'].forEach(ev=>{
+  drop.addEventListener(ev, e=>{e.preventDefault();e.stopPropagation();drop.classList.add('drag');});
+});
+['dragleave','drop'].forEach(ev=>{
+  drop.addEventListener(ev, e=>{e.preventDefault();e.stopPropagation();drop.classList.remove('drag');});
+});
+drop.addEventListener('click', ()=> fileInput.click());
+drop.addEventListener('drop', e=> handleFiles(e.dataTransfer.files));
+
+function handleFiles(files){
+  if(!files || !files.length) return;
+  const f = files[0];
+  const r = new FileReader();
+  r.onload = ()=>{ txtLinks.dataset.uploadContent = r.result; txtLinks.dataset.uploadName = f.name.toLowerCase(); updateAll(); };
+  r.readAsText(f);
+}
+
+/* ---- CSV Parser ---- */
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF) text = text.slice(1);
+  const rows=[]; let row=[], cur='', inQ=false;
+  const pushCell=()=>{row.push(cur);cur='';}, pushRow=()=>{rows.push(row);row=[];};
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(inQ){
+      if(ch=='"'){ if(text[i+1]=='"'){cur+='"'; i++;} else inQ=false; }
+      else cur+=ch;
+    }else{
+      if(ch=='"') inQ=true;
+      else if(ch==',') pushCell();
+      else if(ch=='\r'){}
+      else if(ch=='\n'){ pushCell(); pushRow(); }
+      else cur+=ch;
+    }
+  }
+  pushCell(); pushRow();
+  if(rows.length && rows[rows.length-1].length===1 && rows[rows.length-1][0]==='') rows.pop();
+  if(!rows.length) return [];
+  const headers = rows[0].map(h=>h.trim().toLowerCase());
+  const out=[];
+  for(let r=1;r<rows.length;r++){
+    const obj={};
+    for(let c=0;c<headers.length;c++){ obj[headers[c]] = (rows[r][c] ?? '').trim(); }
+    out.push(obj);
+  }
+  return out;
+}
+
+/* ---- Helpers ---- */
+function resolveUrl(u){
+  u=(u||'').trim(); if(!u) return null;
+  const m = u.match(/\s#.*$/); if(m) u = u.slice(0, m.index).trim();
+  if(/^https?:\/\//i.test(u)) return u;
+  return null;
+}
+
+/* ---- Parse inputs (url فقط، وchangefreq إن وُجد) ---- */
+function parseInputs(){
+  const errs = [];
+  let recs=[];
+
+  const upText = txtLinks.dataset.uploadContent;
+  const upName = (txtLinks.dataset.uploadName||'').toLowerCase();
+
+  if(upText){
+    if(upName.endsWith('.json')){
+      try{
+        const arr = JSON.parse(upText);
+        if(!Array.isArray(arr)) throw new Error('JSON يجب أن يكون مصفوفة كائنات');
+        recs = arr.map(x=>({ url: x.url ?? '', changefreq: x.changefreq ?? '' }));
+      }catch(e){ errs.push('تعذّر قراءة JSON: '+e.message); }
+    }else{
+      try{
+        const rows = parseCSV(upText);
+        if(!rows.length) errs.push('الملف CSV فارغ.');
+        const hasUrl = rows.length && ('url' in rows[0]);
+        if(!hasUrl) errs.push('CSV يجب أن يحتوي عمود url.');
+        recs = rows.map(r=>({ url: r.url || '', changefreq: r.changefreq || '' }));
+      }catch{ errs.push('تعذّر قراءة CSV.'); }
+    }
+  }else{
+    const lines = txtLinks.value.split(/\r?\n/);
+    recs = lines.map(x=>({url:x}));
+  }
+
+  // تنظيف + إزالة مكررات
+  const seen = new Set(); const out=[];
+  for(const r of recs){
+    let u = resolveUrl(r.url); if(!u) continue;
+
+    // إزالة utm_* دائمًا
+    try{
+      const uo = new URL(u); const p=uo.searchParams; const del=[];
+      p.forEach((v,k)=>{ if(k.toLowerCase().startsWith('utm_')) del.push(k); });
+      del.forEach(k=>p.delete(k)); uo.search=p.toString(); u = uo.toString();
+    }catch{}
+
+    if(seen.has(u)) continue; seen.add(u);
+    out.push({ url:u, changefreq: r.changefreq || 'daily' });
+  }
+  return {records: out, errors: errs};
+}
+
+/* ---- Build sitemaps (بدون alternates/images/priority/lastmod) ---- */
+function buildSitemaps(){
+  const {records, errors} = parseInputs();
+  const CHUNK = 50000;
+  const chunks = [];
+  for(let i=0;i<records.length;i+=CHUNK){ chunks.push(records.slice(i,i+CHUNK)); }
+
+  const nsBase='http://www.sitemaps.org/schemas/sitemap/0.9';
+
+  const urlsetOpen = ()=> `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="${nsBase}">\n`;
+  const urlEntry = it => {
+    let xml = `  <url>\n    <loc>${escapeXml(it.url)}</loc>\n`;
+    if(it.changefreq) xml+=`    <changefreq>${escapeXml(it.changefreq)}</changefreq>\n`;
+    xml+=`  </url>\n`; 
+    return xml;
+  };
+
+  const files=[];
+  for(let i=0;i<chunks.length;i++){
+    let xml=urlsetOpen(); for(const it of chunks[i]) xml+=urlEntry(it); xml+='</urlset>\n';
+    const name = (chunks.length===1) ? 'sitemap.xml' : `sitemap-${i+1}.xml`;
+    files.push({name, xml});
+  }
+
+  // فهرس (lastmod فقط على مستوى الفهرس)
+  let indexXml='';
+  const root = 'https://example.com/';
+  if(files.length>1){
+    indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="${nsBase}">\n`;
+    const last = new Date().toISOString().slice(0,10);
+    for(const f of files){
+      indexXml += `  <sitemap>\n    <loc>${escapeXml(root+f.name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n`;
+    }
+    indexXml += `</sitemapindex>\n`;
+    files.push({name:'sitemap_index.xml', xml:indexXml});
+  }else{
+    const last=new Date().toISOString().slice(0,10);
+    indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="${nsBase}">\n  <sitemap>\n    <loc>${escapeXml(root+files[0].name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n</sitemapindex>\n`;
+  }
+
+  const approxSize = files.reduce((s,f)=> s + new TextEncoder().encode(f.xml).length, 0);
+  return {files, indexXml, count: records.length, approxSize, errors};
+}
+
+/* ---- ZIP (Stored) ---- */
+const CRC_TABLE = (()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++){ c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);} t[n]=c>>>0;} return t;})();
+const crc32 = bytes => { let c=0^(-1); for(let i=0;i<bytes.length;i++){ c=(c>>>8)^CRC_TABLE[(c^bytes[i])&0xFF]; } return (c^(-1))>>>0; };
+function dosTimeDate(d=new Date()){ return { time:(d.getHours()<<11)|(d.getMinutes()<<5)|(Math.floor(d.getSeconds()/2)), date:(((d.getFullYear()-1980)&0x7F)<<9)|((d.getMonth()+1)<<5)|d.getDate() }; }
+function w32(v,o,x){x.setUint32(o,v,true)} function w16(v,o,x){x.setUint16(v,o,true)}
+function buildZipBlob(files){
+  const now=new Date(); const {time,date}=dosTimeDate(now);
+  let total=0, offsets=[];
+  for(const f of files){ const nb=new TextEncoder().encode(f.name); offsets.push(total); total+=30+nb.length+f.data.length; }
+  let cd=0; for(const f of files){ cd += 46 + new TextEncoder().encode(f.name).length; }
+  const eocd=22; const buf=new ArrayBuffer(total+cd+eocd); const view=new DataView(buf); const u8=new Uint8Array(buf);
+  let p=0; const recs=[];
+  for(let i=0;i<files.length;i++){
+    const f=files[i], nb=new TextEncoder().encode(f.name), data=f.data, crc=crc32(data);
+    view.setUint32(p,0x04034b50,true); p+=4; view.setUint16(p,20,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2;
+    view.setUint16(p,time,true); p+=2; view.setUint16(p,date,true); p+=2; view.setUint32(p,crc,true); p+=4; view.setUint32(p,data.length,true); p+=4; view.setUint32(p,data.length,true); p+=4;
+    view.setUint16(p,nb.length,true); p+=2; view.setUint16(p,0,true); p+=2; u8.set(nb,p); p+=nb.length; u8.set(data,p); p+=data.length;
+    recs.push({nb,crc,size:data.length,off:offsets[i]});
+  }
+  const cdStart=p;
+  for(const r of recs){
+    view.setUint32(p,0x02014b50,true); p+=4; view.setUint16(p,20,true); p+=2; view.setUint16(p,20,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2;
+    view.setUint16(p,time,true); p+=2; view.setUint16(p,date,true); p+=2; view.setUint32(p,r.crc,true); p+=4; view.setUint32(p,r.size,true); p+=4; view.setUint32(p,r.size,true); p+=4;
+    view.setUint16(p,r.nb.length,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint32(p,0,true); p+=4; view.setUint32(p,r.off,true); p+=4; u8.set(r.nb,p); p+=r.nb.length;
+  }
+  const cdEnd=p;
+  view.setUint32(p,0x06054b50,true); p+=4; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,files.length,true); p+=2; view.setUint16(p,files.length,true); p+=2; view.setUint32(p,cdEnd-cdStart,true); p+=4; view.setUint32(p,cdStart,true); p+=4; view.setUint16(p,0,true); p+=2;
+  return new Blob([u8], {type:'application/zip'});
+}
+
+/* ---- تنزيل ---- */
+function downloadBlob(blob, filename){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click();
+  URL.revokeObjectURL(a.href); a.remove();
+}
+
+/* ---- التوليد والمعاينة ---- */
+let lastBuild=null;
+function updateAll(){
+  const {files, indexXml, count, approxSize, errors} = buildSitemaps();
+  lastBuild = {files, indexXml};
+  links.innerHTML='';
+  if(errors.length){
+    errorsBox.style.display='block';
+    errorsBox.innerHTML = 'ملاحظات:<br>- ' + errors.map(e=>escapeXml(e)).join('<br>- ');
+  }else{
+    errorsBox.style.display='none'; errorsBox.textContent='';
+  }
+
+  sumCount.textContent = String(count);
+  sumFiles.textContent = String(files.length);
+  sumSize.textContent = (approxSize/1024).toFixed(1) + ' KB';
+
+  if(files.length){
+    const first = files[0].xml;
+    code.innerHTML = highlightXml(first.slice(0,6000));
+    for(const f of files){
+      const a=document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([f.xml],{type:'application/xml'}));
+      a.download = f.name;
+      a.textContent = `تنزيل ${f.name}`;
+      a.className = 'btn';
+      a.style.margin='6px 6px 0 0';
+      links.appendChild(a);
+    }
+  }else{
+    code.textContent=''; links.textContent='لا يوجد ملفات بعد.';
+  }
+
+  btnZip.disabled = files.length===0;
+  btnCopyIndex.disabled = files.length===0;
+}
+updateAll();
+
+btnCopyIndex.addEventListener('click', async ()=>{
+  if(!lastBuild) return;
+  try{
+    await navigator.clipboard.writeText(lastBuild.indexXml||'');
+    btnCopyIndex.textContent='تم النسخ ✓';
+    setTimeout(()=> btnCopyIndex.textContent='نسخ sitemap_index.xml', 1200);
+  }catch{
+    const w=window.open(); if(w){ w.document.write('<pre>'+escapeXml(lastBuild.indexXml||'')+'</pre>'); w.document.close(); }
+  }
+});
+btnZip.addEventListener('click', ()=>{
+  if(!lastBuild || !lastBuild.files.length) return;
+  const files = lastBuild.files.map(f=>({name:f.name, data: toBytes(f.xml)}));
+  const now=new Date();
+  const ts = now.getFullYear().toString()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'-'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+  const blob = buildZipBlob(files);
+  downloadBlob(blob, `sitemaps-${ts}.zip`);
+});
+
+/* ---- تمييز XML ---- */
+function highlightXml(xml){
+  const esc = escapeXml(xml);
+  return esc
+    .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="cm">$1</span>')
+    .replace(/(&lt;\/?)([a-zA-Z0-9:.-]+)([^&]*?&gt;)/g, (m,p1,tag,rest)=>{
+      const attrs = rest.replace(/\s([a-zA-Z0-9:-]+)=(&quot;.*?&quot;|&apos;.*?&apos;)/g,(m2,a,v)=>` <span class="attr">${a}</span>=<span class="val">${v}</span>`);
+      return `<span class="tag">${p1}${tag}</span>${attrs}`;
+    });
+}
+</script>
+</body>
+</html>
