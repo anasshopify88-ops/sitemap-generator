@@ -1,171 +1,150 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover"/>
-<title>آداة منشئ خريطة الموقع (Sitemap) المجانية</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover"/>
+  <title>آداة منشئ خريطة الموقع (Sitemap) المجانية</title>
 
-<!-- خط عربي جميل -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 
-<style>
-  :root{
-    /* ثيم وفونت بنفس الأداة الأولى */
-    --bg:#f7f8fb; --bg-2:#f1f5fb; --card:#ffffff; --text:#0c1424; --muted:#5b6472; --accent:#2563eb;
-    --ok:#15803d; --warn:#d97706; --error:#dc2626; --border:#e6e9f2; --shadow:0 6px 16px rgba(0,0,0,.08);
-    --radius:16px; --radius-sm:12px;
+  <style>
+    :root{
+      --bg:#f7f8fb; --bg-2:#f1f5fb; --card:#ffffff; --text:#0c1424; --muted:#5b6472;
+      --accent:#2563eb; --ok:#15803d; --warn:#d97706; --error:#dc2626;
+      --border:#e6e9f2; --shadow:0 6px 16px rgba(0,0,0,.08);
+      --radius:16px; --radius-sm:12px;
+      --sidebar-w:280px;
+      --fs-base:13px; --fs-sm:11.5px; --fs-xs:10.5px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:"Cairo",system-ui,Arial,Helvetica,sans-serif; line-height:1.65;
+      background:linear-gradient(180deg,var(--bg),var(--bg-2)); color:var(--text);
+      -webkit-font-smoothing:antialiased; overflow-x:hidden; font-size:var(--fs-base);
+    }
+    .wrap{max-width:1200px;margin:0 auto;padding:24px 16px 64px}
+    .topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+    .btn{
+      border:1px solid var(--border); background:linear-gradient(180deg,#fff,#f9fbff);
+      color:var(--text); padding:8px 12px; border-radius:14px; cursor:pointer;
+      font-weight:700; box-shadow:var(--shadow);
+      transition:transform .18s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+      font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+      /* ✅ حماية من تمدد النص داخل الأزرار */
+      overflow-wrap:anywhere; word-break:break-word; min-width:0;
+    }
+    .btn:hover{transform:translateY(-2px); border-color:#cbd5e1}
+    .btn.primary{background:linear-gradient(135deg,#2563eb,#8b5cf6); color:#fff; border-color:transparent}
+    .btn.ok{background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; border-color:transparent}
+    .btn.home{background:#000; color:#fff; border-color:#000}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); min-width:0}
+    .titleRow{display:flex;align-items:center;gap:10px;justify-content:space-between; min-width:0}
+    h1{margin:0;font-size:clamp(18px,2.2vw,24px);font-weight:800;letter-spacing:.2px}
+    .sub{margin-top:6px;color:var(--muted);font-size:var(--fs-sm)}
+    .notice{margin-top:6px;font-size:12px;color:var(--error)}
+    .notice a{color:var(--error);text-decoration:underline}
+    .layout{
+      display:grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    #sidePanel{display:flex; height:100%; min-height:0; overflow:hidden;}
+    @media (min-width:981px){ #sidePanel{ contain:size; }}
+    .sidebar-card{flex:1 1 auto; height:100%; display:flex; flex-direction:column; gap:10px; min-height:0; overflow:auto;}
+    .avatar{width:112px;height:112px;border-radius:50%;background:#fff;padding:6px;object-fit:contain;object-position:center;border:1px solid var(--border);align-self:center}
+    .logo{width:100%; max-width:180px; align-self:center; object-fit:contain; object-position:center; background:#fff; border-radius:12px; border:1px solid var(--border); padding:8px}
+    .title-logo{width:180px; max-width:180px; align-self:center}
+    .s-list{display:grid; gap:8px}
+    .s-item a{
+      display:block; padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff;
+      color:#0f172a; text-decoration:none; font-weight:600; transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+      box-shadow:0 4px 12px rgba(15,23,42,.05); font-size:13px;
+      overflow-wrap:anywhere; word-break:break-word;
+    }
+    .s-item a:hover{transform:translateY(-2px); border-color:#cbd5e1; box-shadow:0 8px 18px rgba(15,23,42,.08)}
+    .s-caption{color:var(--muted); font-size:11.5px; margin-top:-2px; align-self:center}
+    #toolBox{display:flex; flex-direction:column; gap:10px; min-height:0}
+    .panel.card label{display:block; font-size:14px; margin-bottom:6px}
+    textarea{
+      width:100%; background:#fff; color:#text; border:1px solid var(--border);
+      border-radius:12px; padding:10px 12px; outline:none;
+      min-height:140px; resize:vertical; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; line-height:1.55;
+      /* ✅ جعل الروابط الطويلة لا تكسر التنسيق + اتجاه LTR */
+      overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
+    }
+    input[type="file"], input[type="url"], input[type="number"], select{
+      width:100%; background:#fff; color:var(--text); border:1px solid var(--border);
+      border-radius:12px; padding:10px 12px; outline:none; font-size:13px;
+    }
+    textarea:focus,input[type="file"]:focus,input[type="url"]:focus,input[type="number"]:focus,select:focus{box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+    .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .grid{display:grid; gap:10px}
+    /* ✅ منع تمدد العناصر داخل الشبكات والصفوف */
+    .grid > *, .row > * { min-width:0; }
+    .summary{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
+    .card-mini{background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px}
+    .card-mini .k{font-size:12px; color:var(--muted)}
+    .card-mini .v{font-weight:800; font-size:18px}
+    .code{
+      background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; overflow:auto;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      /* ✅ أهم تعديل: لفّ الأسطر الطويلة داخل المعاينة */
+      white-space:pre-wrap; line-height:1.5; max-height:300px;
+      overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
+    }
+    .hl .tag{color:#0ea5e9}
+    .hl .attr{color:#ef4444}
+    .hl .val{color:#059669}
+    .hl .cm{color:#94a3b8}
+    .links-list a{display:inline-block; margin:.2rem .4rem; font-size:13px; overflow-wrap:anywhere; word-break:break-word}
+    .errors{background:#fff1f2; border:1px solid #fecdd3; color:#b91c1c; border-radius:12px; padding:10px; margin-top:8px; display:none; overflow-wrap:anywhere; word-break:break-word}
+    .drop{
+      border:2px dashed var(--border); border-radius:12px; padding:14px; text-align:center; color:#94a3b8;
+    }
+    .drop.drag{border-color:#06b6d4; background:#f0fdff; color:#0e7490}
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr}
+      #sidePanel{height:auto; overflow:visible;}
+      .avatar{width:104px;height:104px}
+    }
+    .status{font-size:12px; color:var(--muted); margin-top:6px; overflow-wrap:anywhere; word-break:break-word}
+    .badge{display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-weight:700; font-size:11px}
 
-    /* عرض العمود */
-    --sidebar-w:280px;
-
-    /* أحجام أصغر */
-    --fs-base:13px; --fs-sm:11.5px; --fs-xs:10.5px;
-  }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font-family:"Cairo",system-ui,Arial,Helvetica,sans-serif; line-height:1.65;
-    background:linear-gradient(180deg,var(--bg),var(--bg-2)); color:var(--text);
-    -webkit-font-smoothing:antialiased; overflow-x:hidden; font-size:var(--fs-base);
-  }
-
-  .wrap{max-width:1200px;margin:0 auto;padding:24px 16px 64px}
-
-  /* التوب بار */
-  .topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-  .btn{
-    border:1px solid var(--border); background:linear-gradient(180deg,#fff,#f9fbff);
-    color:var(--text); padding:8px 12px; border-radius:14px; cursor:pointer; font-weight:700; box-shadow:var(--shadow);
-    transition:transform .18s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
-    font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-  }
-  .btn:hover{transform:translateY(-2px); border-color:#cbd5e1}
-  .btn.primary{background:linear-gradient(135deg,#2563eb,#8b5cf6); color:#fff; border-color:transparent}
-  .btn.ok{background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; border-color:transparent}
-  .btn.home{background:#000; color:#fff; border-color:#000}
-  .btn:disabled{opacity:.6; cursor:not-allowed}
-
-  /* بطاقات */
-  .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow)}
-
-  /* عنوان الصفحة */
-  .titleRow{display:flex;align-items:center;gap:10px;justify-content:space-between}
-  h1{margin:0;font-size:clamp(18px,2.2vw,24px);font-weight:800;letter-spacing:.2px}
-  .sub{margin-top:6px;color:var(--muted);font-size:var(--fs-sm)}
-  .notice{margin-top:6px;font-size:12px;color:var(--error)}
-  .notice a{color:var(--error);text-decoration:underline}
-
-  /* التخطيط العام: سايدبار يسار + الأداة يمين */
-  .layout{
-    display:grid;
-    grid-template-columns: var(--sidebar-w) 1fr;
-    gap:14px;
-    align-items:stretch; /* يساوي الارتفاع */
-  }
-
-  /* السايدبار بطول الأداة */
-  #sidePanel{
-    display:flex;
-    height:100%;
-    min-height:0;
-    overflow:hidden; /* المحتوى الداخلي يتسكرول داخل البطاقة */
-  }
-  @media (min-width:981px){
-    #sidePanel{ contain:size; } /* يمنع تضخيم الصف */
-  }
-  .sidebar-card{
-    flex:1 1 auto;
-    height:100%;
-    display:flex; flex-direction:column; gap:10px; min-height:0; overflow:auto;
-  }
-  .avatar{width:112px;height:112px;border-radius:50%;background:#fff;padding:6px;object-fit:contain;object-position:center;border:1px solid var(--border);align-self:center}
-  .logo{width:100%; max-width:180px; align-self:center; object-fit:contain; object-position:center; background:#fff; border-radius:12px; border:1px solid var(--border); padding:8px}
-  /* تخصيص الشعار في صف العنوان ليحافظ على نفس الحجم الحالي */
-  .title-logo{width:180px; max-width:180px; align-self:center}
-
-  .s-list{display:grid; gap:8px}
-  .s-item a{
-    display:block; padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff;
-    color:#0f172a; text-decoration:none; font-weight:600; transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease;
-    box-shadow:0 4px 12px rgba(15,23,42,.05); font-size:13px;
-  }
-  .s-item a:hover{transform:translateY(-2px); border-color:#cbd5e1; box-shadow:0 8px 18px rgba(15,23,42,.08)}
-  .s-caption{color:var(--muted); font-size:11.5px; margin-top:-2px; align-self:center}
-
-  /* يمين: صندوق الأداة */
-  #toolBox{display:flex; flex-direction:column; gap:10px; min-height:0}
-
-  /* عناصر الأداة (أعدنا تنسيقها لتبدو كبطاقات) */
-  .panel.card label{display:block; font-size:14px; margin-bottom:6px}
-  textarea{
-    width:100%; background:#fff; color:var(--text); border:1px solid var(--border);
-    border-radius:12px; padding:10px 12px; outline:none;
-    min-height:140px; resize:vertical; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; line-height:1.55
-  }
-  input[type="file"]{
-    width:100%; background:#fff; color:var(--text); border:1px solid var(--border);
-    border-radius:12px; padding:10px 12px; outline:none;
-  }
-  textarea:focus,input[type="file"]:focus{box-shadow:0 0 0 3px rgba(37,99,235,.25)}
-
-  .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-  .grid{display:grid; gap:10px}
-
-  .summary{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
-  .card-mini{background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px}
-  .card-mini .k{font-size:12px; color:var(--muted)}
-  .card-mini .v{font-weight:800; font-size:18px}
-
-  .code{
-    background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; overflow:auto;
-    font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; white-space:pre; line-height:1.5; max-height:300px;
-  }
-  .hl .tag{color:#0ea5e9}
-  .hl .attr{color:#ef4444}
-  .hl .val{color:#059669}
-  .hl .cm{color:#94a3b8}
-
-  .links-list a{display:inline-block; margin:.2rem .4rem; font-size:13px}
-  .errors{background:#fff1f2; border:1px solid #fecdd3; color:#b91c1c; border-radius:12px; padding:10px; margin-top:8px; display:none}
-  .drop{
-    border:2px dashed var(--border); border-radius:12px; padding:14px; text-align:center; color:#94a3b8;
-  }
-  .drop.drag{border-color:#06b6d4; background:#f0fdff; color:#0e7490}
-
-  /* استجابة */
-  @media (max-width:980px){
-    .layout{grid-template-columns:1fr}
-    #sidePanel{height:auto; overflow:visible;}
-    .avatar{width:104px;height:104px}
-  }
-</style>
+    /* 🔘 مُبدّل الوضع (زحف/يدوي) */
+    .seg{display:inline-flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:999px; background:#f1f5fb; overflow:hidden}
+    .seg input{display:none}
+    .seg label{
+      padding:6px 10px; cursor:pointer; user-select:none; font-weight:800; font-size:12px; color:var(--muted);
+    }
+    .seg input:checked + label{
+      background:#fff; color:#text; border:1px solid var(--border); margin:-1px; border-radius:999px; box-shadow:var(--shadow);
+    }
+    .hint{font-size:11.5px; color:var(--muted); margin-top:4px; overflow-wrap:anywhere; word-break:break-word}
+  </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- توب بار -->
     <nav class="topbar">
       <button class="btn" type="button" onclick="history.back()">رجوع</button>
       <a class="btn home" href="https://anasrashed.com" rel="noopener">الرئيسية</a>
     </nav>
 
-    <!-- عنوان -->
     <div class="card">
       <div class="titleRow">
         <div>
           <h1>آداة منشئ خريطة الموقع (Sitemap) المجانية</h1>
-          <p class="notice">اذا باقتك بلس، اطلب خدمة تفعيل خريطة الموقع في Google Search Console <a href="https://anasrashed.com/ZqyGaBZ" rel="noopener">من هنا</a></p>
+          <div class="sub">ملاحظة: الزحف الكامل دَوْميّن فقط (domain crawl) مع حد أقصى 2000 رابط.</div>
         </div>
-        <!-- الشعار منقول إلى يسار العنوان -->
         <img class="logo title-logo" src="https://i.imgur.com/meUEoP7.png" alt="الشعار"
              onerror="this.onerror=null; this.src='https://i.imgur.com/meUEoP7.jpg';">
       </div>
     </div>
 
-    <!-- التخطيط: السايدبار يسار + الأداة يمين -->
     <div class="layout" style="margin-top:12px">
-      <!-- العمود الأيسر -->
       <aside id="sidePanel">
         <div class="card sidebar-card">
           <img class="avatar" src="https://i.imgur.com/B3UkEQ0.jpg" alt="صورتي" referrerpolicy="no-referrer"
@@ -182,39 +161,58 @@
             <div class="s-item"><a href="https://anasrashed.com/توثيق-التجارة-الإلكترونية/page-1494027497" target="_blank" rel="noopener">توثيق التجارة الإلكترونية</a></div>
             <div class="s-item"><a href="https://contact.anasrashed.com" target="_blank" rel="noopener">تواصل معي</a></div>
           </div>
-          <!-- تم إزالة الشعار من هنا بعد نقله لصف العنوان -->
         </div>
       </aside>
 
-      <!-- يمين: الأداة -->
       <section id="toolBox">
-        <!-- إدخال -->
+        <!-- لوحة الزحف -->
+        <section class="panel card" id="crawlPanel">
+          <div class="grid" style="grid-template-columns:1fr; align-items:end">
+            <div>
+              <label for="startUrl">رابط الموقع</label>
+              <input id="startUrl" type="url" placeholder="مثال: https://example.com" inputmode="url">
+            </div>
+            <div class="row" style="justify-content:flex-start">
+              <button id="btnCrawl" class="btn primary" type="button">ابدأ الزحف</button>
+              <button id="btnCancel" class="btn" type="button" disabled>إلغاء</button>
+              <span id="crawlBadge" class="badge" style="display:none">جارٍ الزحف…</span>
+            </div>
+          </div>
+          <div id="crawlStatus" class="status"></div>
+        </section>
+
+        <!-- لوحة الروابط: زحف/يدوي -->
         <section class="panel card">
           <div class="row" style="justify-content:space-between; align-items:flex-end">
-            <label for="txtLinks" style="margin:0">ألصق الروابط</label>
+            <div>
+              <label id="lblLinksHeader" for="txtLinks" style="margin:0">المعاينة / الروابط المكتشفة</label>
+              <div class="hint" id="modeHint">سيتم عرض الروابط المكتشفة هنا بعد الزحف.</div>
+            </div>
             <div class="row">
+              <div class="seg" role="tablist" aria-label="طريقة الإدخال" id="modeSeg">
+                <input type="radio" name="mode" id="modeCrawl" value="crawl" checked>
+                <label for="modeCrawl" role="tab" aria-controls="txtLinks">زحف تلقائي</label>
+                <input type="radio" name="mode" id="modeManual" value="manual">
+                <label for="modeManual" role="tab" aria-controls="txtLinks">إدخال يدوي</label>
+              </div>
+              <button id="btnBuildManual" class="btn primary" type="button" disabled>بناء من الروابط</button>
+              <!-- أزرار وضع اليدوي فقط (تظهر عند manualOnly) -->
+              <button id="btnCopyIndexLite" class="btn" type="button" style="display:none" disabled>نسخ sitemap_index.xml</button>
+              <button id="btnZipLite" class="btn ok" type="button" style="display:none" disabled>تنزيل ZIP</button>
               <button id="btnClear" class="btn" type="button">مسح</button>
             </div>
           </div>
 
-          <textarea id="txtLinks" placeholder="اضف روابطك هنا."></textarea>
-
-          <div class="grid" style="margin-top:10px">
-            <div>
-              <label for="fileInput">أو ارفع CSV/JSON</label>
-              <input id="fileInput" type="file" accept=".csv,.json,application/json,text/csv"/>
-              <div id="drop" class="drop" style="margin-top:8px">اسحب وأفلِت الملف هنا أو انقر للاختيار</div>
-            </div>
-          </div>
+          <textarea id="txtLinks" dir="ltr" placeholder="هنا تُعرض الروابط بعد الزحف ..."></textarea>
         </section>
 
-        <!-- المعاينة والتنزيل -->
-        <section class="panel card">
+        <!-- لوحة المعاينة والتحميل -->
+        <section class="panel card" id="previewPanel">
           <div class="row" style="justify-content:space-between">
             <h3 style="margin:6px 0 10px">المعاينة</h3>
             <div class="row">
               <button id="btnCopyIndex" class="btn primary" type="button" disabled>نسخ sitemap_index.xml</button>
-              <button id="btnZip" class="btn ok" type="button" disabled>تنزيل جميع الخرائط كـ ZIP</button>
+              <button id="btnZip" class="btn ok" type="button" disabled>تنزيل sitemap كـ ZIP</button>
             </div>
           </div>
 
@@ -227,7 +225,7 @@
           <div class="grid" style="margin-top:10px">
             <div>
               <label>مقتطف XML</label>
-              <div id="code" class="code hl" aria-live="polite"></div>
+              <div id="code" class="code hl" aria-live="polite" dir="ltr"></div>
             </div>
             <div>
               <div id="links" class="links-list">لا يوجد ملفات بعد.</div>
@@ -240,289 +238,592 @@
   </div>
 
 <script>
-/* -------- إعداد صورة Imgur (بدون قص) — يُستخدم في السايدبار بالأساس -------- */
-(function initAvatarFallback(){
-  const img = document.querySelector('.avatar');
-  if(!img) return;
-})();
+  const $ = s => document.querySelector(s);
+  const toBytes = s => new TextEncoder().encode(s);
+  const escapeXml = s => String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
 
-/* ================= منطق الأداة (بدون تغيير في الإعدادات/السلوك) ================= */
-const $ = s=>document.querySelector(s);
-const toBytes = s => new TextEncoder().encode(s);
-const escapeXml = s => String(s)
-  .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-  .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+  const txtLinks = $('#txtLinks');
+  const btnClear = $('#btnClear');
+  const btnZip = $('#btnZip');
+  const btnCopyIndex = $('#btnCopyIndex');
+  const sumCount = $('#sumCount');
+  const sumFiles = $('#sumFiles');
+  const sumSize = $('#sumSize');
+  const code = $('#code');
+  const links = $('#links');
+  const errorsBox = $('#errors');
 
-const txtLinks = $('#txtLinks');
-const fileInput = $('#fileInput');
-const drop = $('#drop');
-const btnClear = $('#btnClear');
-const btnZip = $('#btnZip');
-const btnCopyIndex = $('#btnCopyIndex');
-const sumCount = $('#sumCount');
-const sumFiles = $('#sumFiles');
-const sumSize = $('#sumSize');
-const code = $('#code');
-const links = $('#links');
-const errorsBox = $('#errors');
+  const startUrlEl = $('#startUrl');
+  const btnCrawl = $('#btnCrawl');
+  const btnCancel = $('#btnCancel');
+  const crawlStatus = $('#crawlStatus');
+  const crawlBadge = $('#crawlBadge');
+  const crawlPanel = $('#crawlPanel');
 
-let debounceTimer=null;
-const debounce = (fn,ms=150)=>{ clearTimeout(debounceTimer); debounceTimer=setTimeout(fn,ms); };
+  const modeCrawl = $('#modeCrawl');
+  const modeManual = $('#modeManual');
+  const btnBuildManual = $('#btnBuildManual');
+  const lblLinksHeader = $('#lblLinksHeader');
+  const modeHint = $('#modeHint');
+  const previewPanel = $('#previewPanel');
+  const modeSeg = $('#modeSeg');
 
-txtLinks.addEventListener('input', ()=> debounce(updateAll));
-btnClear.addEventListener('click', ()=>{ txtLinks.value=''; delete txtLinks.dataset.uploadContent; delete txtLinks.dataset.uploadName; updateAll(); });
+  // أزرار النسخة المبسّطة (يدوي فقط)
+  const btnCopyIndexLite = $('#btnCopyIndexLite');
+  const btnZipLite = $('#btnZipLite');
 
-/* ---- رفع CSV/JSON ---- */
-fileInput.addEventListener('change', e=> handleFiles(e.target.files));
-['dragenter','dragover'].forEach(ev=>{
-  drop.addEventListener(ev, e=>{e.preventDefault();e.stopPropagation();drop.classList.add('drag');});
-});
-['dragleave','drop'].forEach(ev=>{
-  drop.addEventListener(ev, e=>{e.preventDefault();e.stopPropagation();drop.classList.remove('drag');});
-});
-drop.addEventListener('click', ()=> fileInput.click());
-drop.addEventListener('drop', e=> handleFiles(e.dataTransfer.files));
+  // قراءة باراميتر الرابط manualOnly=1 لتفعيل وضع "يدوي فقط" بدون معاينة
+  const qs = new URLSearchParams(location.search);
+  const isManualOnly = /^(1|true|yes|on)$/i.test(qs.get('manualOnly') || '');
 
-function handleFiles(files){
-  if(!files || !files.length) return;
-  const f = files[0];
-  const r = new FileReader();
-  r.onload = ()=>{ txtLinks.dataset.uploadContent = r.result; txtLinks.dataset.uploadName = f.name.toLowerCase(); updateAll(); };
-  r.readAsText(f);
-}
+  let cancelFlag = false;
+  let currentMode = 'crawl'; // 'crawl' | 'manual'
+  let lastBuild = null;
 
-/* ---- CSV Parser ---- */
-function parseCSV(text){
-  if(text.charCodeAt(0)===0xFEFF) text = text.slice(1);
-  const rows=[]; let row=[], cur='', inQ=false;
-  const pushCell=()=>{row.push(cur);cur='';}, pushRow=()=>{rows.push(row);row=[];};
-  for(let i=0;i<text.length;i++){
-    const ch=text[i];
-    if(inQ){
-      if(ch=='"'){ if(text[i+1]=='"'){cur+='"'; i++;} else inQ=false; }
-      else cur+=ch;
-    }else{
-      if(ch=='"') inQ=true;
-      else if(ch==',') pushCell();
-      else if(ch=='\r'){}
-      else if(ch=='\n'){ pushCell(); pushRow(); }
-      else cur+=ch;
-    }
+  function resolveUrl(u){
+    u=(u||'').trim();
+    if(!u) return null;
+    const m = u.match(/\s#.*$/);
+    if(m) u = u.slice(0, m.index).trim();
+    if(/^https?:\/\//i.test(u)) return u;
+    return null;
   }
-  pushCell(); pushRow();
-  if(rows.length && rows[rows.length-1].length===1 && rows[rows.length-1][0]==='') rows.pop();
-  if(!rows.length) return [];
-  const headers = rows[0].map(h=>h.trim().toLowerCase());
-  const out=[];
-  for(let r=1;r<rows.length;r++){
-    const obj={};
-    for(let c=0;c<headers.length;c++){ obj[headers[c]] = (rows[r][c] ?? '').trim(); }
-    out.push(obj);
-  }
-  return out;
-}
-
-/* ---- Helpers ---- */
-function resolveUrl(u){
-  u=(u||'').trim(); if(!u) return null;
-  const m = u.match(/\s#.*$/); if(m) u = u.slice(0, m.index).trim();
-  if(/^https?:\/\//i.test(u)) return u;
-  return null;
-}
-
-/* ---- Parse inputs (url فقط، وchangefreq إن وُجد) ---- */
-function parseInputs(){
-  const errs = [];
-  let recs=[];
-
-  const upText = txtLinks.dataset.uploadContent;
-  const upName = (txtLinks.dataset.uploadName||'').toLowerCase();
-
-  if(upText){
-    if(upName.endsWith('.json')){
-      try{
-        const arr = JSON.parse(upText);
-        if(!Array.isArray(arr)) throw new Error('JSON يجب أن يكون مصفوفة كائنات');
-        recs = arr.map(x=>({ url: x.url ?? '', changefreq: x.changefreq ?? '' }));
-      }catch(e){ errs.push('تعذّر قراءة JSON: '+e.message); }
-    }else{
-      try{
-        const rows = parseCSV(upText);
-        if(!rows.length) errs.push('الملف CSV فارغ.');
-        const hasUrl = rows.length && ('url' in rows[0]);
-        if(!hasUrl) errs.push('CSV يجب أن يحتوي عمود url.');
-        recs = rows.map(r=>({ url: r.url || '', changefreq: r.changefreq || '' }));
-      }catch{ errs.push('تعذّر قراءة CSV.'); }
-    }
-  }else{
-    const lines = txtLinks.value.split(/\r?\n/);
-    recs = lines.map(x=>({url:x}));
-  }
-
-  // تنظيف + إزالة مكررات
-  const seen = new Set(); const out=[];
-  for(const r of recs){
-    let u = resolveUrl(r.url); if(!u) continue;
-
-    // إزالة utm_* دائمًا
+  function normalize(u){
     try{
-      const uo = new URL(u); const p=uo.searchParams; const del=[];
-      p.forEach((v,k)=>{ if(k.toLowerCase().startsWith('utm_')) del.push(k); });
-      del.forEach(k=>p.delete(k)); uo.search=p.toString(); u = uo.toString();
+      const url = new URL(u);
+      url.hash = '';
+      const delKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid','mc_cid','mc_eid','ref'];
+      delKeys.forEach(k=> url.searchParams.delete(k));
+      let s = url.toString();
+      if(url.pathname !== '/' && s.endsWith('/')) s = s.slice(0,-1);
+      return s;
+    }catch{ return null; }
+  }
+  function sameHost(u, origin){
+    try{
+      const h1 = new URL(u).host.replace(/^www\./,'');
+      const h2 = new URL(origin).host.replace(/^www\./,'');
+      return h1 === h2;
+    }catch{ return false; }
+  }
+  function extBlocked(u){
+    return /\.(?:jpe?g|png|gif|webp|svg|bmp|ico|mp4|avi|mov|wmv|mkv|mp3|wav|pdf|zip|rar|7z|gz|css|js|woff2?|ttf|eot)(\?|#|$)/i.test(u);
+  }
+
+  // ====== إعدادات البروكسي (شكل ?url=) ======
+  const PROXY_PREFIX = 'https://sitemap-generator.anasshopify88.workers.dev';
+  function proxify(u){
+    return PROXY_PREFIX + '?url=' + encodeURIComponent(u);
+  }
+
+  async function fetchText(u){
+    try{
+      const r = await fetch(u, {credentials:'omit', cache:'no-cache', redirect:'follow'});
+      if(r.ok) return await r.text();
     }catch{}
-
-    if(seen.has(u)) continue; seen.add(u);
-    out.push({ url:u, changefreq: r.changefreq || 'daily' });
-  }
-  return {records: out, errors: errs};
-}
-
-/* ---- Build Sitemaps (بدون alternates/images/priority/lastmod) ---- */
-function buildSitemaps(){
-  const {records, errors} = parseInputs();
-  const CHUNK = 50000;
-  const chunks = [];
-  for(let i=0;i<records.length;i+=CHUNK){ chunks.push(records.slice(i,i+CHUNK)); }
-
-  const nsBase='http://www.sitemaps.org/schemas/sitemap/0.9';
-
-  const urlsetOpen = ()=> `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="${nsBase}">\n`;
-  const urlEntry = it => {
-    let xml = `  <url>\n    <loc>${escapeXml(it.url)}</loc>\n`;
-    if(it.changefreq) xml+=`    <changefreq>${escapeXml(it.changefreq)}</changefreq>\n`;
-    xml+=`  </url>\n`; 
-    return xml;
-  };
-
-  const files=[];
-  for(let i=0;i<chunks.length;i++){
-    let xml=urlsetOpen(); for(const it of chunks[i]) xml+=urlEntry(it); xml+='</urlset>\n';
-    const name = (chunks.length===1) ? 'sitemap.xml' : `sitemap-${i+1}.xml`;
-    files.push({name, xml});
+    try{
+      const r = await fetch(proxify(u), {credentials:'omit', cache:'no-cache', redirect:'follow'});
+      if(r.ok) return await r.text();
+    }catch{}
+    throw new Error('تعذّر قراءة: '+u);
   }
 
-  // فهرس (lastmod فقط على مستوى الفهرس)
-  let indexXml='';
-  const root = 'https://example.com/'; /* لا تغيّر الإعدادات */
-  if(files.length>1){
-    indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="${nsBase}">\n`;
-    const last = new Date().toISOString().slice(0,10);
-    for(const f of files){
-      indexXml += `  <sitemap>\n    <loc>${escapeXml(root+f.name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n`;
+  async function fetchOk(u){
+    try{
+      const r = await fetch(u, {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow'});
+      if(r.ok) return true;
+    }catch{}
+    try{
+      const r = await fetch(proxify(u), {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow'});
+      if(r.ok) return true;
+    }catch{}
+    return false;
+  }
+
+  const sleep = ms => new Promise(r=> setTimeout(r, ms));
+
+  async function readRobots(origin){
+    const url = new URL('/robots.txt', origin).toString();
+    try{
+      const txt = await fetchText(url);
+      const lines = txt.split(/\r?\n/).map(l=>l.trim());
+      const rules = {disallow:[], allow:[]};
+      let active = false;
+      for(const ln of lines){
+        if(/^user-agent:\s*\*/i.test(ln)){ active = true; continue; }
+        if(/^user-agent:/i.test(ln) && !/^user-agent:\s*\*/i.test(ln)){ active = false; continue; }
+        if(!active) continue;
+        const mD = ln.match(/^disallow:\s*(.*)$/i);
+        const mA = ln.match(/^allow:\s*(.*)$/i);
+        if(mD){ rules.disallow.push((mD[1]||'').trim()); }
+        if(mA){ rules.allow.push((mA[1]||'').trim()); }
+      }
+      return path => {
+        const allowHit = rules.allow.some(p=> p && path.startsWith(p));
+        const disHit = rules.disallow.some(p=> p && path.startsWith(p));
+        if(allowHit) return true;
+        if(disHit) return false;
+        return true;
+      };
+    }catch{
+      return () => true;
     }
-    indexXml += `</sitemapindex>\n`;
-    files.push({name:'sitemap_index.xml', xml:indexXml});
-  }else{
-    const last=new Date().toISOString().slice(0,10);
-    indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="${nsBase}">\n  <sitemap>\n    <loc>${escapeXml(root+files[0].name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n</sitemapindex>\n`;
   }
 
-  const approxSize = files.reduce((s,f)=> s + new TextEncoder().encode(f.xml).length, 0);
-  return {files, indexXml, count: records.length, approxSize, errors};
-}
+  async function crawlDomain(start, limit=2000){
+    const origin = new URL(start).origin;
+    const allowPath = await readRobots(origin);
+    const q = [ normalize(start) ];
+    const seen = new Set();
+    const out = new Set();
 
-/* ---- ZIP (Stored) ---- */
-const CRC_TABLE = (()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++){ c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);} t[n]=c>>>0;} return t;})();
-const crc32 = bytes => { let c=0^(-1); for(let i=0;i<bytes.length;i++){ c=(c>>>8)^CRC_TABLE[(c^bytes[i])&0xFF]; } return (c^(-1))>>>0; };
-function dosTimeDate(d=new Date()){ return { time:(d.getHours()<<11)|(d.getMinutes()<<5)|(Math.floor(d.getSeconds()/2)), date:(((d.getFullYear()-1980)&0x7F)<<9)|((d.getMonth()+1)<<5)|d.getDate() }; }
-function buildZipBlob(files){
-  const now=new Date(); const {time,date}=dosTimeDate(now);
-  let total=0, offsets=[];
-  for(const f of files){ const nb=new TextEncoder().encode(f.name); offsets.push(total); total+=30+nb.length+f.data.length; }
-  let cd=0; for(const f of files){ cd += 46 + new TextEncoder().encode(f.name).length; }
-  const eocd=22; const buf=new ArrayBuffer(total+cd+eocd); const view=new DataView(buf); const u8=new Uint8Array(buf);
-  let p=0; const recs=[];
-  for(let i=0;i<files.length;i++){
-    const f=files[i], nb=new TextEncoder().encode(f.name), data=f.data, crc=crc32(data);
-    view.setUint32(p,0x04034b50,true); p+=4; view.setUint16(p,20,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2;
-    view.setUint16(p,time,true); p+=2; view.setUint16(p,date,true); p+=2; view.setUint32(p,crc,true); p+=4; view.setUint32(p,data.length,true); p+=4; view.setUint32(p,data.length,true); p+=4;
-    view.setUint16(p,nb.length,true); p+=2; view.setUint16(p,0,true); p+=2; u8.set(nb,p); p+=nb.length; u8.set(data,p); p+=data.length;
-    recs.push({nb,crc,size:data.length,off:offsets[i]});
-  }
-  const cdStart=p;
-  for(const r of recs){
-    view.setUint32(p,0x02014b50,true); p+=4; view.setUint16(p,20,true); p+=2; view.setUint16(p,20,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2;
-    view.setUint16(p,time,true); p+=2; view.setUint16(p,date,true); p+=2; view.setUint32(p,r.crc,true); p+=4; view.setUint32(p,r.size,true); p+=4; view.setUint32(p,r.size,true); p+=4;
-    view.setUint16(p,r.nb.length,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint32(p,0,true); p+=4; view.setUint32(p,r.off,true); p+=4; u8.set(r.nb,p); p+=r.nb.length;
-  }
-  const cdEnd=p;
-  view.setUint32(p,0x06054b50,true); p+=4; view.setUint16(p,0,true); p+=2; view.setUint16(p,0,true); p+=2; view.setUint16(p,files.length,true); p+=2; view.setUint16(p,files.length,true); p+=2; view.setUint32(p,cdEnd-cdStart,true); p+=4; view.setUint32(p,cdStart,true); p+=4; view.setUint16(p,0,true); p+=2;
-  return new Blob([u8], {type:'application/zip'});
-}
+    // ⛔️ استثناءات المسارات (أضفنا tag/tags هنا)
+    const EXCLUDE_PATTERNS = [
+      /\/(cart|checkout|login|account|orders|admin|wp-admin|cdn-cgi)(\/|$)/i,
+      /(^|\/)(tag|tags)(\/|$)/i
+    ];
 
-/* ---- تنزيل ---- */
-function downloadBlob(blob, filename){
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click();
-  URL.revokeObjectURL(a.href); a.remove();
-}
+    const CONCURRENCY = 3;
+    let active = 0;
 
-/* ---- التوليد والمعاينة ---- */
-let lastBuild=null;
-function updateAll(){
-  const {files, indexXml, count, approxSize, errors} = buildSitemaps();
-  lastBuild = {files, indexXml};
-  links.innerHTML='';
-  if(errors.length){
-    errorsBox.style.display='block';
-    errorsBox.innerHTML = 'ملاحظات:<br>- ' + errors.map(e=>escapeXml(e)).join('<br>- ');
-  }else{
-    errorsBox.style.display='none'; errorsBox.textContent='';
-  }
+    updateStatus('بدء الزحف…');
 
-  sumCount.textContent = String(count);
-  sumFiles.textContent = String(files.length);
-  sumSize.textContent = (approxSize/1024).toFixed(1) + ' KB';
+    async function worker(){
+      while(q.length && !cancelFlag && out.size < limit){
+        const url = q.shift();
+        if(!url || seen.has(url)) continue;
+        seen.add(url);
 
-  if(files.length){
-    const first = files[0].xml;
-    code.innerHTML = highlightXml(first.slice(0,6000));
-    for(const f of files){
-      const a=document.createElement('a');
-      a.href = URL.createObjectURL(new Blob([f.xml],{type:'application/xml'}));
-      a.download = f.name;
-      a.textContent = `تنزيل ${f.name}`;
-      a.className = 'btn';
-      a.style.margin='6px 6px 0 0';
-      links.appendChild(a);
+        try{
+          const uo = new URL(url);
+          if(!allowPath(uo.pathname)) continue;
+          if(EXCLUDE_PATTERNS.some(rx=> rx.test(uo.pathname))) continue;
+
+          active++;
+          const html = await fetchText(url);
+
+          let canonical = null;
+          try{
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            const metaRobots = doc.querySelector('meta[name="robots"]');
+            if(metaRobots && /noindex/i.test(metaRobots.getAttribute('content')||'')){
+              // تجاهل لو noindex
+            } else {
+              const linkCanonical = doc.querySelector('link[rel="canonical"]');
+              if(linkCanonical && linkCanonical.href){
+                canonical = normalize(linkCanonical.href);
+              }
+              const anchors = Array.from(doc.querySelectorAll('a[href]')).map(a=> a.getAttribute('href'));
+              for(const h of anchors){
+                if(!h) continue;
+                let abs;
+                try{ abs = new URL(h, url).toString(); } catch{ continue; }
+                if(!sameHost(abs, origin)) continue;
+                if(extBlocked(abs)) continue;
+                const n = normalize(abs);
+                if(!n || seen.has(n) || out.size + q.length >= limit) continue;
+
+                // ✂️ فلترة tag/tags قبل دخول الطابور:
+                try{
+                  const pn = new URL(n).pathname;
+                  if(EXCLUDE_PATTERNS.some(rx=> rx.test(pn))) continue;
+                }catch{}
+                q.push(n);
+              }
+            }
+          }catch{}
+
+          const finalUrl = (canonical && sameHost(canonical, origin)) ? canonical : url;
+
+          if(!extBlocked(finalUrl)){
+            // ✂️ فلترة tag/tags قبل الإضافة النهائية:
+            try{
+              const pf = new URL(finalUrl).pathname;
+              if(!EXCLUDE_PATTERNS.some(rx=> rx.test(pf))){
+                out.add(finalUrl);
+              }
+            }catch{
+              out.add(finalUrl);
+            }
+          }
+
+          updateStatus(`مكتشفة: ${out.size} / قيد المعالجة: ${q.length} روابط`);
+          await sleep(150);
+        }catch(e){
+          // تجاهل أخطاء الصفحة الواحدة
+        }finally{
+          active--;
+        }
+      }
     }
-  }else{
-    code.textContent=''; links.textContent='لا يوجد ملفات بعد.';
+
+    const workers = Array.from({length:CONCURRENCY}, ()=> worker());
+    await Promise.race([
+      Promise.all(workers),
+      new Promise(res => {
+        const t = setInterval(()=>{
+          if((!q.length && active===0) || cancelFlag || out.size >= limit){
+            clearInterval(t);
+            res();
+          }
+        }, 200);
+      })
+    ]);
+
+    if(cancelFlag) cancelFlag = false;
+    return Array.from(out);
   }
 
-  btnZip.disabled = files.length===0;
-  btnCopyIndex.disabled = files.length===0;
-}
-updateAll();
-
-btnCopyIndex.addEventListener('click', async ()=>{
-  if(!lastBuild) return;
-  try{
-    await navigator.clipboard.writeText(lastBuild.indexXml||'');
-    btnCopyIndex.textContent='تم النسخ ✓';
-    setTimeout(()=> btnCopyIndex.textContent='نسخ sitemap_index.xml', 1200);
-  }catch{
-    const w=window.open(); if(w){ w.document.write('<pre>'+escapeXml(lastBuild.indexXml||'')+'</pre>'); w.document.close(); }
+  function parseInputsFromList(lines){
+    const seen = new Set();
+    const out = [];
+    for(const u of lines){
+      const nu = normalize(u);
+      if(nu && !seen.has(nu)){
+        seen.add(nu);
+        out.push({ url: nu, changefreq: 'daily' });
+      }
+    }
+    return out;
   }
-});
-btnZip.addEventListener('click', ()=>{
-  if(!lastBuild || !lastBuild.files.length) return;
-  const files = lastBuild.files.map(f=>({name:f.name, data: toBytes(f.xml)}));
-  const now=new Date();
-  const ts = now.getFullYear().toString()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'-'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
-  const blob = buildZipBlob(files);
-  downloadBlob(blob, `sitemaps-${ts}.zip`);
-});
 
-/* ---- تمييز XML ---- */
-function highlightXml(xml){
-  const esc = escapeXml(xml);
-  return esc
-    .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="cm">$1</span>')
-    .replace(/(&lt;\/?)([a-zA-Z0-9:.-]+)([^&]*?&gt;)/g, (m,p1,tag,rest)=>{
-      const attrs = rest.replace(/\s([a-zA-Z0-9:-]+)=(&quot;.*?&quot;|&apos;.*?&apos;)/g,(m2,a,v)=>` <span class="attr">${a}</span>=<span class="val">${v}</span>`);
-      return `<span class="tag">${p1}${tag}</span>${attrs}`;
-    });
-}
+  function buildSitemapsFromUrls(urls){
+    const records = parseInputsFromList(urls);
+    const CHUNK = 50000;
+    const chunks = [];
+    for(let i=0;i<records.length;i+=CHUNK){
+      chunks.push(records.slice(i,i+CHUNK));
+    }
+
+    const nsBase = 'http://www.sitemaps.org/schemas/sitemap/0.9';
+    const urlsetOpen = () => `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="${nsBase}">\n`;
+    const urlEntry = it => {
+      let xml = `  <url>\n    <loc>${escapeXml(it.url)}</loc>\n`;
+      if(it.changefreq){
+        xml += `    <changefreq>${escapeXml(it.changefreq)}</changefreq>\n`;
+      }
+      xml += `  </url>\n`;
+      return xml;
+    };
+
+    const files = [];
+    for(let i=0; i<chunks.length; i++){
+      let xml = urlsetOpen();
+      for(const it of chunks[i]) xml += urlEntry(it);
+      xml += `</urlset>\n`;
+      const name = (chunks.length === 1) ? 'sitemap.xml' : `sitemap-${i+1}.xml`;
+      files.push({ name, xml });
+    }
+
+    let indexXml = '';
+    if(files.length > 1){
+      indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="${nsBase}">\n`;
+      const last = new Date().toISOString().slice(0,10);
+      for(const f of files){
+        indexXml += `  <sitemap>\n    <loc>${escapeXml(f.name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n`;
+      }
+      indexXml += `</sitemapindex>\n`;
+      files.push({ name: 'sitemap_index.xml', xml: indexXml });
+    }
+
+    const approxSize = files.reduce((s,f)=> s + new TextEncoder().encode(f.xml).length, 0);
+    return { files, indexXml, count: records.length, approxSize, errors: [] };
+  }
+
+  function updatePreview(filesObj){
+    const { files, indexXml, count, approxSize } = filesObj;
+    lastBuild = { files, indexXml };
+
+    // إن كان الوضع "يدوي فقط" فلا نعرض المعاينة، لكن نحدّث حالات أزرار النسخة المبسطة
+    if(isManualOnly){
+      const hasFiles = files.length > 0;
+      btnZipLite.disabled = !hasFiles;
+      btnCopyIndexLite.disabled = !hasFiles;
+      updateStatus(hasFiles
+        ? `تم البناء من الإدخال اليدوي. مجموع الروابط بعد التنظيف: ${count}.`
+        : 'لا يوجد ملفات بعد.');
+      return;
+    }
+
+    // التصرّف الافتراضي (مع المعاينة)
+    links.innerHTML = '';
+    errorsBox.style.display = 'none';
+    sumCount.textContent = String(count);
+    sumFiles.textContent = String(files.length);
+    sumSize.textContent = (approxSize / 1024).toFixed(1) + ' KB';
+
+    if(files.length){
+      const first = files[0].xml;
+      code.textContent = first.slice(0,6000);
+      for(const f of files){
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([f.xml], {type:'application/xml'}));
+        a.download = f.name;
+        a.textContent = `تنزيل ${f.name}`;
+        a.className = 'btn';
+        a.style.margin='6px 6px 0 0';
+        links.appendChild(a);
+      }
+    } else {
+      code.textContent = '';
+      links.textContent = 'لا يوجد ملفات بعد.';
+    }
+    btnZip.disabled = files.length === 0;
+    btnCopyIndex.disabled = files.length === 0;
+  }
+
+  function buildFromManual(){
+    const lines = txtLinks.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+    if(!lines.length){
+      updateStatus('لم يتم إدخال أي روابط. ألصق كل رابط في سطر ثم اضغط "بناء من الروابط".');
+      updatePreview({files:[], indexXml:'', count:0, approxSize:0, errors:[]});
+      return;
+    }
+    const sitemapObj = buildSitemapsFromUrls(lines);
+    updatePreview(sitemapObj);
+    if(!isManualOnly){
+      updateStatus(`تم البناء من الإدخال اليدوي. مجموع الروابط بعد التنظيف: ${sitemapObj.count}.`);
+    }
+  }
+
+  // ========= وضع "زحف تلقائي" =========
+  btnCrawl.addEventListener('click', async () => {
+    if(currentMode !== 'crawl'){
+      updateStatus('وضع الإدخال اليدوي مُفعل، فعّل "زحف تلقائي" للزحف.');
+      return;
+    }
+    const start = resolveUrl(startUrlEl.value);
+    if(!start){
+      updateStatus('فضلاً أدخل رابط الموقع صحيح يبدأ بـ https:// أو http://');
+      return;
+    }
+    btnCrawl.disabled = true;
+    btnCancel.disabled = false;
+    crawlBadge.style.display = 'inline-block';
+    updateStatus('جاري الزحف…');
+
+    try {
+      const urls = await crawlDomain(start, 2000);
+      updateStatus(`تم اكتشاف ${urls.length} رابط بعد الزحف.`);
+      txtLinks.value = urls.join('\n');
+      const sitemapObj = buildSitemapsFromUrls(urls);
+      updatePreview(sitemapObj);
+      updateStatus(`تم! مجموع الروابط بعد التنظيف: ${sitemapObj.count}.`);
+    } catch(e){
+      updateStatus('فشل أثناء الزحف: ' + (e.message || e));
+    } finally {
+      btnCrawl.disabled = false;
+      btnCancel.disabled = true;
+      crawlBadge.style.display = 'none';
+    }
+  });
+
+  btnCancel.addEventListener('click', () => {
+    cancelFlag = true;
+    updateStatus('تم الإلغاء.');
+  });
+
+  // ========= وضع "إدخال يدوي" =========
+  btnBuildManual.addEventListener('click', buildFromManual);
+  txtLinks.addEventListener('keydown', (e)=>{
+    if(currentMode==='manual' && (e.metaKey||e.ctrlKey) && e.key==='Enter'){
+      e.preventDefault(); buildFromManual();
+    }
+  });
+  txtLinks.addEventListener('input', ()=>{
+    btnBuildManual.disabled = currentMode!=='manual' || txtLinks.value.trim().length===0;
+    if(isManualOnly){
+      btnCopyIndexLite.disabled = true;
+      btnZipLite.disabled = true;
+    }
+  });
+
+  // ========= عام =========
+  btnClear.addEventListener('click', () => {
+    txtLinks.value = '';
+    sumCount.textContent = '0';
+    sumFiles.textContent = '0';
+    sumSize.textContent = '0 KB';
+    links.innerHTML = '';
+    code.textContent = '';
+    btnZip.disabled = true;
+    btnCopyIndex.disabled = true;
+    if(isManualOnly){
+      btnZipLite.disabled = true;
+      btnCopyIndexLite.disabled = true;
+    }
+    if(currentMode==='manual'){
+      updateStatus('تم المسح. ألصق الروابط ثم اضغط "بناء من الروابط".');
+      btnBuildManual.disabled = true;
+    }else{
+      updateStatus('تم المسح.');
+    }
+  });
+
+  // أزرار النسخة المبسّطة تعيد استخدام نفس منطق الأزرار الأساسية
+  btnCopyIndex.addEventListener('click', async () => {
+    if(!lastBuild) return;
+    try {
+      await navigator.clipboard.writeText(lastBuild.indexXml || '');
+      btnCopyIndex.textContent = 'تم النسخ ✓';
+      setTimeout(() => btnCopyIndex.textContent = 'نسخ sitemap_index.xml', 1200);
+    } catch {
+      const w = window.open();
+      if(w){
+        w.document.write('<pre>' + escapeXml(lastBuild.indexXml || '') + '</pre>');
+        w.document.close();
+      }
+    }
+  });
+  btnZip.addEventListener('click', () => {
+    if(!lastBuild || !lastBuild.files.length) return;
+    const files = lastBuild.files.map(f => ({ name: f.name, data: toBytes(f.xml) }));
+    const now = new Date();
+    const ts = now.getFullYear().toString()
+               + String(now.getMonth()+1).padStart(2, '0')
+               + String(now.getDate()).padStart(2, '0') + '-'
+               + String(now.getHours()).padStart(2, '0')
+               + String(now.getMinutes()).padStart(2, '0');
+    const blob = buildZipBlob(files);
+    downloadBlob(blob, `sitemaps-${ts}.zip`);
+  });
+
+  // ربط الأزرار المبسطة بنفس الأفعال
+  btnCopyIndexLite.addEventListener('click', () => btnCopyIndex.click());
+  btnZipLite.addEventListener('click', () => btnZip.click());
+
+  function downloadBlob(blob, filename){
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(a.href);
+    a.remove();
+  }
+
+  function updateStatus(msg){
+    crawlStatus.textContent = msg || '';
+  }
+
+  // ====== منشئ ZIP (كامل) ======
+  function buildZipBlob(files){
+    const encoder = new TextEncoder();
+    const writeU32 = (buf, off, v) => { buf[off]=v&255; buf[off+1]=(v>>>8)&255; buf[off+2]=(v>>>16)&255; buf[off+3]=(v>>>24)&255; };
+    const writeU16 = (buf, off, v) => { buf[off]=v&255; buf[off+1]=(v>>>8)&255; };
+
+    const crcTable = (()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++){ c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1); } t[n]=c>>>0;} return t; })();
+    const crc32 = (u8)=>{ let c=0xFFFFFFFF; for(let i=0;i<u8.length;i++){ c=crcTable[(c^u8[i])&0xFF]^(c>>>8);} return (c^0xFFFFFFFF)>>>0; };
+
+    const localParts=[], centralParts=[];
+    let offset=0;
+
+    for(const f of files){
+      const nameBytes = encoder.encode(f.name);
+      const data = f.data instanceof Uint8Array ? f.data : new Uint8Array(f.data);
+      const crc = crc32(data);
+      const comp = data;
+      const compSize = comp.length, uncompSize = data.length;
+
+      const LFH = new Uint8Array(30 + nameBytes.length);
+      writeU32(LFH,0,0x04034b50); writeU16(LFH,4,20); writeU16(LFH,6,0); writeU16(LFH,8,0);
+      writeU16(LFH,10,0); writeU16(LFH,12,0);
+      writeU32(LFH,14,crc); writeU32(LFH,18,compSize); writeU32(LFH,22,uncompSize);
+      writeU16(LFH,26,nameBytes.length); writeU16(LFH,28,0);
+      LFH.set(nameBytes,30);
+
+      localParts.push(LFH, comp);
+      const localOffset = offset;
+      offset += LFH.length + comp.length;
+
+      const CDH = new Uint8Array(46 + nameBytes.length);
+      writeU32(CDH,0,0x02014b50); writeU16(CDH,4,20); writeU16(CDH,6,20); writeU16(CDH,8,0); writeU16(CDH,10,0);
+      writeU16(CDH,12,0); writeU16(CDH,14,0);
+      writeU32(CDH,16,crc); writeU32(CDH,20,compSize); writeU32(CDH,24,uncompSize);
+      writeU16(CDH,28,nameBytes.length); writeU16(CDH,30,0); writeU16(CDH,32,0);
+      writeU16(CDH,34,0); writeU16(CDH,36,0); writeU32(CDH,38,0);
+      writeU32(CDH,42,localOffset);
+      CDH.set(nameBytes,46);
+      centralParts.push(CDH);
+    }
+
+    const localLen = localParts.reduce((s,a)=> s + a.length, 0);
+    const centralLen = centralParts.reduce((s,a)=> s + a.length, 0);
+
+    const END = new Uint8Array(22);
+    writeU32(END,0,0x06054b50); writeU16(END,4,0); writeU16(END,6,0);
+    writeU16(END,8,centralParts.length); writeU16(END,10,centralParts.length);
+    writeU32(END,12,centralLen); writeU32(END,16,localLen); writeU16(END,20,0);
+
+    const all = new Uint8Array(localLen + centralLen + END.length);
+    let p=0; for(const part of localParts){ all.set(part,p); p+=part.length; }
+    for(const part of centralParts){ all.set(part,p); p+=part.length; }
+    all.set(END,p);
+
+    return new Blob([all], {type:'application/zip'});
+  }
+
+  // ====== تبديل الوضع واجهةً ======
+  function applyModeUi(){
+    if(modeCrawl.checked){ currentMode = 'crawl'; }
+    if(modeManual.checked){ currentMode = 'manual'; }
+
+    const isManual = currentMode === 'manual';
+
+    // لوحة الزحف
+    startUrlEl.disabled = isManual;
+    btnCrawl.disabled = isManual;
+    btnCancel.disabled = true;
+    crawlBadge.style.display = 'none';
+
+    // منطقة الروابط
+    txtLinks.readOnly = !isManual;
+    txtLinks.placeholder = isManual
+      ? 'ألصق الروابط يدوياً هنا… ضع كل رابط في سطر مستقل.'
+      : 'هنا تُعرض الروابط بعد الزحف ...';
+
+    lblLinksHeader.textContent = isManual ? 'روابط الإدخال اليدوي' : 'المعاينة / الروابط المكتشفة';
+    modeHint.textContent = isManual
+      ? 'ألصق روابطك يدويًا ثم اضغط "بناء من الروابط" (Ctrl/⌘ + Enter).'
+      : 'سيتم عرض الروابط المكتشفة هنا بعد الزحف.';
+
+    btnBuildManual.disabled = !isManual || txtLinks.value.trim().length===0;
+
+    updateStatus(isManual ? 'وضع الإدخال اليدوي مُفعّل.' : 'وضع الزحف مُفعّل.');
+  }
+
+  // تطبيق وضع "يدوي فقط" إن طُلِب عبر الرابط
+  function applyManualOnlyUi(){
+    if(!isManualOnly) return;
+    modeManual.checked = true;
+    modeCrawl.checked = false;
+    currentMode = 'manual';
+    applyModeUi();
+
+    if(modeSeg) modeSeg.style.display = 'none';
+    crawlPanel.style.display = 'none';
+    if(previewPanel) previewPanel.style.display = 'none';
+
+    btnCopyIndexLite.style.display = 'inline-flex';
+    btnZipLite.style.display = 'inline-flex';
+    btnCopyIndexLite.disabled = true;
+    btnZipLite.disabled = true;
+
+    lblLinksHeader.textContent = 'روابط الإدخال اليدوي';
+    modeHint.textContent = 'الوضع المبسّط مُفعّل عبر الرابط: إدخال يدوي فقط بلا معاينة. الصق الروابط ثم اضغط "بناء من الروابط".';
+    updateStatus('وضع الإدخال اليدوي فقط (بدون معاينة) مُفعّل.');
+  }
+
+  // ترتيب التهيئة
+  modeCrawl.addEventListener('change', applyModeUi);
+  modeManual.addEventListener('change', applyModeUi);
+  applyModeUi();          // تهيئة أولية للوضع الافتراضي
+  applyManualOnlyUi();    // قد تعدّل الواجهة إن كان manualOnly=1 في الرابط
 </script>
+
 </body>
 </html>
