@@ -32,7 +32,6 @@
       font-weight:700; box-shadow:var(--shadow);
       transition:transform .18s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
       font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-      /* ✅ حماية من تمدد النص داخل الأزرار */
       overflow-wrap:anywhere; word-break:break-word; min-width:0;
     }
     .btn:hover{transform:translateY(-2px); border-color:#cbd5e1}
@@ -46,12 +45,7 @@
     .sub{margin-top:6px;color:var(--muted);font-size:var(--fs-sm)}
     .notice{margin-top:6px;font-size:12px;color:var(--error)}
     .notice a{color:var(--error);text-decoration:underline}
-    .layout{
-      display:grid;
-      grid-template-columns: var(--sidebar-w) 1fr;
-      gap:14px;
-      align-items:stretch;
-    }
+    .layout{display:grid; grid-template-columns: var(--sidebar-w) 1fr; gap:14px; align-items:stretch;}
     #sidePanel{display:flex; height:100%; min-height:0; overflow:hidden;}
     @media (min-width:981px){ #sidePanel{ contain:size; }}
     .sidebar-card{flex:1 1 auto; height:100%; display:flex; flex-direction:column; gap:10px; min-height:0; overflow:auto;}
@@ -73,7 +67,6 @@
       width:100%; background:#fff; color:#text; border:1px solid var(--border);
       border-radius:12px; padding:10px 12px; outline:none;
       min-height:140px; resize:vertical; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; line-height:1.55;
-      /* ✅ جعل الروابط الطويلة لا تكسر التنسيق + اتجاه LTR */
       overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
     }
     input[type="file"], input[type="url"], input[type="number"], select{
@@ -83,7 +76,6 @@
     textarea:focus,input[type="file"]:focus,input[type="url"]:focus,input[type="number"]:focus,select:focus{box-shadow:0 0 0 3px rgba(37,99,235,.25)}
     .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
     .grid{display:grid; gap:10px}
-    /* ✅ منع تمدد العناصر داخل الشبكات والصفوف */
     .grid > *, .row > * { min-width:0; }
     .summary{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
     .card-mini{background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px}
@@ -92,7 +84,6 @@
     .code{
       background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; overflow:auto;
       font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      /* ✅ أهم تعديل: لفّ الأسطر الطويلة داخل المعاينة */
       white-space:pre-wrap; line-height:1.5; max-height:300px;
       overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
     }
@@ -102,9 +93,7 @@
     .hl .cm{color:#94a3b8}
     .links-list a{display:inline-block; margin:.2rem .4rem; font-size:13px; overflow-wrap:anywhere; word-break:break-word}
     .errors{background:#fff1f2; border:1px solid #fecdd3; color:#b91c1c; border-radius:12px; padding:10px; margin-top:8px; display:none; overflow-wrap:anywhere; word-break:break-word}
-    .drop{
-      border:2px dashed var(--border); border-radius:12px; padding:14px; text-align:center; color:#94a3b8;
-    }
+    .drop{border:2px dashed var(--border); border-radius:12px; padding:14px; text-align:center; color:#94a3b8;}
     .drop.drag{border-color:#06b6d4; background:#f0fdff; color:#0e7490}
     @media (max-width:980px){
       .layout{grid-template-columns:1fr}
@@ -117,13 +106,17 @@
     /* 🔘 مُبدّل الوضع (زحف/يدوي) */
     .seg{display:inline-flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:999px; background:#f1f5fb; overflow:hidden}
     .seg input{display:none}
-    .seg label{
-      padding:6px 10px; cursor:pointer; user-select:none; font-weight:800; font-size:12px; color:var(--muted);
-    }
+    .seg label{padding:6px 10px; cursor:pointer; user-select:none; font-weight:800; font-size:12px; color:var(--muted);}
     .seg input:checked + label{
       background:#fff; color:#text; border:1px solid var(--border); margin:-1px; border-radius:999px; box-shadow:var(--shadow);
     }
     .hint{font-size:11.5px; color:var(--muted); margin-top:4px; overflow-wrap:anywhere; word-break:break-word}
+
+    /* 📊 شريط التقدّم أسفل الأزرار */
+    .crawl-progress{margin-top:10px; display:flex; flex-direction:column; gap:6px;}
+    .progressbar{height:12px; background:#eef2ff; border:1px solid var(--border); border-radius:999px; overflow:hidden;}
+    .progressbar > span{display:block; height:100%; width:0%; background:linear-gradient(90deg,#22d3ee,#60a5fa,#2563eb);}
+    .progress-meta{display:flex; justify-content:space-between; font-size:12px; color:var(--muted);}
   </style>
 </head>
 <body>
@@ -177,6 +170,18 @@
               <button id="btnCancel" class="btn" type="button" disabled>إلغاء</button>
               <span id="crawlBadge" class="badge" style="display:none">جارٍ الزحف…</span>
             </div>
+
+            <!-- ⬇️ شريط التقدم الطويل تحت الأزرار -->
+            <div class="crawl-progress" aria-live="polite">
+              <div class="progressbar" aria-label="تقدم الزحف">
+                <span id="crawlPbar"></span>
+              </div>
+              <div class="progress-meta">
+                <span id="crawlPcent">0%</span>
+                <span id="crawlPhelp">جاهز للبدء</span>
+              </div>
+            </div>
+            <!-- ⬆️ نهاية شريط التقدم -->
           </div>
           <div id="crawlStatus" class="status"></div>
         </section>
@@ -262,6 +267,11 @@
   const crawlBadge = $('#crawlBadge');
   const crawlPanel = $('#crawlPanel');
 
+  // عناصر التقدّم
+  const crawlPbar = $('#crawlPbar');
+  const crawlPcent = $('#crawlPcent');
+  const crawlPhelp = $('#crawlPhelp');
+
   const modeCrawl = $('#modeCrawl');
   const modeManual = $('#modeManual');
   const btnBuildManual = $('#btnBuildManual');
@@ -274,13 +284,53 @@
   const btnCopyIndexLite = $('#btnCopyIndexLite');
   const btnZipLite = $('#btnZipLite');
 
-  // قراءة باراميتر الرابط manualOnly=1 لتفعيل وضع "يدوي فقط" بدون معاينة
   const qs = new URLSearchParams(location.search);
   const isManualOnly = /^(1|true|yes|on)$/i.test(qs.get('manualOnly') || '');
 
   let cancelFlag = false;
   let currentMode = 'crawl'; // 'crawl' | 'manual'
   let lastBuild = null;
+
+  /* ====== وظائف شريط التقدّم ====== */
+  const PROG_SOFT_CAP = 90; // لا نتجاوزها قبل اكتمال العملية
+  let progVal = 0, progTimer = null;
+  function renderCrawlProgress(p){
+    const v = Math.max(0, Math.min(100, Math.round(p)));
+    if(crawlPbar) crawlPbar.style.width = v + '%';
+    if(crawlPcent) crawlPcent.textContent = v + '%';
+  }
+  function resetCrawlProgress(){
+    clearInterval(progTimer); progTimer = null;
+    progVal = 0; renderCrawlProgress(0);
+    if(crawlPhelp) crawlPhelp.textContent = 'جاهز للبدء';
+  }
+  function startCrawlProgress(){
+    clearInterval(progTimer);
+    progVal = 0; renderCrawlProgress(0);
+    if(crawlPhelp) crawlPhelp.textContent = 'جاري الزحف…';
+    progTimer = setInterval(()=>{
+      // تقدّم وهمي بسيط حتى 90%، ويتم رفعه لاحقًا بالقيم الحقيقية
+      progVal = Math.min(PROG_SOFT_CAP, progVal + Math.max(0.4, (PROG_SOFT_CAP - progVal)*0.06));
+      renderCrawlProgress(progVal);
+    }, 200);
+  }
+  function bumpCrawlProgressByRatio(ratio){
+    // ratio بين 0 و 1 (من حجم limit)
+    const exact = Math.max(0, Math.min(100, Math.round(ratio*100)));
+    if(exact > progVal){ progVal = exact; renderCrawlProgress(progVal); }
+  }
+  function finishCrawlProgress(){
+    clearInterval(progTimer); progTimer = null;
+    const start = progVal, end = 100, dur = 500;
+    const t0 = performance.now();
+    (function anim(now){
+      const k = Math.min(1, (now - t0)/dur);
+      const eased = start + (end - start) * (0.5 - Math.cos(Math.PI*k)/2);
+      renderCrawlProgress(eased);
+      if(k < 1) requestAnimationFrame(anim);
+    })(performance.now());
+    if(crawlPhelp) crawlPhelp.textContent = 'اكتمل الزحف';
+  }
 
   function resolveUrl(u){
     u=(u||'').trim();
@@ -379,7 +429,6 @@
     const seen = new Set();
     const out = new Set();
 
-    // ⛔️ استثناءات المسارات (أضفنا tag/tags هنا)
     const EXCLUDE_PATTERNS = [
       /\/(cart|checkout|login|account|orders|admin|wp-admin|cdn-cgi)(\/|$)/i,
       /(^|\/)(tag|tags)(\/|$)/i
@@ -427,7 +476,6 @@
                 const n = normalize(abs);
                 if(!n || seen.has(n) || out.size + q.length >= limit) continue;
 
-                // ✂️ فلترة tag/tags قبل دخول الطابور:
                 try{
                   const pn = new URL(n).pathname;
                   if(EXCLUDE_PATTERNS.some(rx=> rx.test(pn))) continue;
@@ -440,7 +488,6 @@
           const finalUrl = (canonical && sameHost(canonical, origin)) ? canonical : url;
 
           if(!extBlocked(finalUrl)){
-            // ✂️ فلترة tag/tags قبل الإضافة النهائية:
             try{
               const pf = new URL(finalUrl).pathname;
               if(!EXCLUDE_PATTERNS.some(rx=> rx.test(pf))){
@@ -452,6 +499,9 @@
           }
 
           updateStatus(`مكتشفة: ${out.size} / قيد المعالجة: ${q.length} روابط`);
+          // تحديث شريط التقدّم (نعتمد على limit كحد أعلى)
+          bumpCrawlProgressByRatio(out.size / Math.max(1, limit));
+
           await sleep(150);
         }catch(e){
           // تجاهل أخطاء الصفحة الواحدة
@@ -538,7 +588,6 @@
     const { files, indexXml, count, approxSize } = filesObj;
     lastBuild = { files, indexXml };
 
-    // إن كان الوضع "يدوي فقط" فلا نعرض المعاينة، لكن نحدّث حالات أزرار النسخة المبسطة
     if(isManualOnly){
       const hasFiles = files.length > 0;
       btnZipLite.disabled = !hasFiles;
@@ -549,7 +598,6 @@
       return;
     }
 
-    // التصرّف الافتراضي (مع المعاينة)
     links.innerHTML = '';
     errorsBox.style.display = 'none';
     sumCount.textContent = String(count);
@@ -605,16 +653,22 @@
     btnCancel.disabled = false;
     crawlBadge.style.display = 'inline-block';
     updateStatus('جاري الزحف…');
+    startCrawlProgress();
 
     try {
-      const urls = await crawlDomain(start, 2000);
+      const limit = 2000;
+      const urls = await crawlDomain(start, limit);
       updateStatus(`تم اكتشاف ${urls.length} رابط بعد الزحف.`);
+      bumpCrawlProgressByRatio(1); // ضمان الوصول 100% منطقيًا
+      finishCrawlProgress();
+
       txtLinks.value = urls.join('\n');
       const sitemapObj = buildSitemapsFromUrls(urls);
       updatePreview(sitemapObj);
       updateStatus(`تم! مجموع الروابط بعد التنظيف: ${sitemapObj.count}.`);
     } catch(e){
       updateStatus('فشل أثناء الزحف: ' + (e.message || e));
+      resetCrawlProgress();
     } finally {
       btnCrawl.disabled = false;
       btnCancel.disabled = true;
@@ -625,6 +679,7 @@
   btnCancel.addEventListener('click', () => {
     cancelFlag = true;
     updateStatus('تم الإلغاء.');
+    resetCrawlProgress();
   });
 
   // ========= وضع "إدخال يدوي" =========
@@ -661,10 +716,10 @@
       btnBuildManual.disabled = true;
     }else{
       updateStatus('تم المسح.');
+      resetCrawlProgress();
     }
   });
 
-  // أزرار النسخة المبسّطة تعيد استخدام نفس منطق الأزرار الأساسية
   btnCopyIndex.addEventListener('click', async () => {
     if(!lastBuild) return;
     try {
@@ -710,7 +765,7 @@
     crawlStatus.textContent = msg || '';
   }
 
-  // ====== منشئ ZIP (كامل) ======
+  // ====== منشئ ZIP ======
   function buildZipBlob(files){
     const encoder = new TextEncoder();
     const writeU32 = (buf, off, v) => { buf[off]=v&255; buf[off+1]=(v>>>8)&255; buf[off+2]=(v>>>16)&255; buf[off+3]=(v>>>24)&255; };
@@ -793,10 +848,11 @@
 
     btnBuildManual.disabled = !isManual || txtLinks.value.trim().length===0;
 
-    updateStatus(isManual ? 'وضع الإدخال اليدوي مُفعّل.' : 'وضع الزحف مُفعّل.');
+    // ⛔️ تم حذف عبارة "وضع الزحف مُفعّل."
+    updateStatus(isManual ? 'وضع الإدخال اليدوي مُفعّل.' : '');
+    if(!isManual) resetCrawlProgress();
   }
 
-  // تطبيق وضع "يدوي فقط" إن طُلِب عبر الرابط
   function applyManualOnlyUi(){
     if(!isManualOnly) return;
     modeManual.checked = true;
@@ -821,8 +877,8 @@
   // ترتيب التهيئة
   modeCrawl.addEventListener('change', applyModeUi);
   modeManual.addEventListener('change', applyModeUi);
-  applyModeUi();          // تهيئة أولية للوضع الافتراضي
-  applyManualOnlyUi();    // قد تعدّل الواجهة إن كان manualOnly=1 في الرابط
+  applyModeUi();
+  applyManualOnlyUi();
 </script>
 
 </body>
