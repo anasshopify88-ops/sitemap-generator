@@ -43,8 +43,6 @@
     .titleRow{display:flex;align-items:center;gap:10px;justify-content:space-between; min-width:0}
     h1{margin:0;font-size:clamp(18px,2.2vw,24px);font-weight:800;letter-spacing:.2px}
     .sub{margin-top:6px;color:var(--muted);font-size:var(--fs-sm)}
-    .notice{margin-top:6px;font-size:12px;color:var(--error)}
-    .notice a{color:var(--error);text-decoration:underline}
     .layout{display:grid; grid-template-columns: var(--sidebar-w) 1fr; gap:14px; align-items:stretch;}
     #sidePanel{display:flex; height:100%; min-height:0; overflow:hidden;}
     @media (min-width:981px){ #sidePanel{ contain:size; }}
@@ -70,7 +68,7 @@
       overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
     }
     input[type="file"], input[type="url"], input[type="number"], select{
-      width:100%; background:#fff; color:var(--text); border:1px solid var(--border);
+      width:100%; background:#fff; color:#var(--text); border:1px solid var(--border);
       border-radius:12px; padding:10px 12px; outline:none; font-size:13px;
     }
     textarea:focus,input[type="file"]:focus,input[type="url"]:focus,input[type="number"]:focus,select:focus{box-shadow:0 0 0 3px rgba(37,99,235,.25)}
@@ -79,12 +77,12 @@
     .grid > *, .row > * { min-width:0; }
     .summary{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
     .card-mini{background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px}
-    .card-mini .k{font-size:12px; color:var(--muted)}
+    .card-mini .k{font-size:12px; color:#muted}
     .card-mini .v{font-weight:800; font-size:18px}
     .code{
       background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; overflow:auto;
       font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      white-space:pre-wrap; line-height:1.5; max-height:300px;
+      white-space:pre-wrap; line-height:1.5; max-height:600px;
       overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
     }
     .hl .tag{color:#0ea5e9}
@@ -93,30 +91,31 @@
     .hl .cm{color:#94a3b8}
     .links-list a{display:inline-block; margin:.2rem .4rem; font-size:13px; overflow-wrap:anywhere; word-break:break-word}
     .errors{background:#fff1f2; border:1px solid #fecdd3; color:#b91c1c; border-radius:12px; padding:10px; margin-top:8px; display:none; overflow-wrap:anywhere; word-break:break-word}
-    .drop{border:2px dashed var(--border); border-radius:12px; padding:14px; text-align:center; color:#94a3b8;}
-    .drop.drag{border-color:#06b6d4; background:#f0fdff; color:#0e7490}
     @media (max-width:980px){
       .layout{grid-template-columns:1fr}
       #sidePanel{height:auto; overflow:visible;}
       .avatar{width:104px;height:104px}
     }
-    .status{font-size:12px; color:var(--muted); margin-top:6px; overflow-wrap:anywhere; word-break:break-word}
+    .status{font-size:12px; color:#5b6472; margin-top:6px; overflow-wrap:anywhere; word-break:break-word}
     .badge{display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-weight:700; font-size:11px}
 
-    /* 🔘 مُبدّل الوضع (زحف/يدوي) */
+    /* مبدّل الوضع */
     .seg{display:inline-flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:999px; background:#f1f5fb; overflow:hidden}
     .seg input{display:none}
-    .seg label{padding:6px 10px; cursor:pointer; user-select:none; font-weight:800; font-size:12px; color:var(--muted);}
+    .seg label{padding:6px 10px; cursor:pointer; user-select:none; font-weight:800; font-size:12px; color:#5b6472;}
     .seg input:checked + label{
-      background:#fff; color:#text; border:1px solid var(--border); margin:-1px; border-radius:999px; box-shadow:var(--shadow);
+      background:#fff; color:#0c1424; border:1px solid var(--border); margin:-1px; border-radius:999px; box-shadow:var(--shadow);
     }
-    .hint{font-size:11.5px; color:var(--muted); margin-top:4px; overflow-wrap:anywhere; word-break:break-word}
 
-    /* 📊 شريط التقدّم أسفل الأزرار */
+    /* شريط التقدّم */
     .crawl-progress{margin-top:10px; display:flex; flex-direction:column; gap:6px;}
     .progressbar{height:12px; background:#eef2ff; border:1px solid var(--border); border-radius:999px; overflow:hidden;}
-    .progressbar > span{display:block; height:100%; width:0%; background:linear-gradient(90deg,#22d3ee,#60a5fa,#2563eb);}
-    .progress-meta{display:flex; justify-content:space-between; font-size:12px; color:var(--muted);}
+    .progressbar > span{
+      display:block; height:100%; width:0%;
+      background:linear-gradient(90deg,#22d3ee,#60a5fa,#2563eb);
+      transition: width .35s cubic-bezier(.22,.8,.2,1);
+    }
+    .progress-meta{display:flex; justify-content:space-between; font-size:12px; color:#5b6472;}
   </style>
 </head>
 <body>
@@ -171,7 +170,7 @@
               <span id="crawlBadge" class="badge" style="display:none">جارٍ الزحف…</span>
             </div>
 
-            <!-- ⬇️ شريط التقدم الطويل تحت الأزرار -->
+            <!-- شريط التقدم -->
             <div class="crawl-progress" aria-live="polite">
               <div class="progressbar" aria-label="تقدم الزحف">
                 <span id="crawlPbar"></span>
@@ -181,7 +180,6 @@
                 <span id="crawlPhelp">جاهز للبدء</span>
               </div>
             </div>
-            <!-- ⬆️ نهاية شريط التقدم -->
           </div>
           <div id="crawlStatus" class="status"></div>
         </section>
@@ -201,7 +199,6 @@
                 <label for="modeManual" role="tab" aria-controls="txtLinks">إدخال يدوي</label>
               </div>
               <button id="btnBuildManual" class="btn primary" type="button" disabled>بناء من الروابط</button>
-              <!-- أزرار وضع اليدوي فقط (تظهر عند manualOnly) -->
               <button id="btnCopyIndexLite" class="btn" type="button" style="display:none" disabled>نسخ sitemap_index.xml</button>
               <button id="btnZipLite" class="btn ok" type="button" style="display:none" disabled>تنزيل ZIP</button>
               <button id="btnClear" class="btn" type="button">مسح</button>
@@ -229,7 +226,7 @@
 
           <div class="grid" style="margin-top:10px">
             <div>
-              <label>مقتطف XML</label>
+              <label>مقتطف XML (كامل)</label>
               <div id="code" class="code hl" aria-live="polite" dir="ltr"></div>
             </div>
             <div>
@@ -267,7 +264,6 @@
   const crawlBadge = $('#crawlBadge');
   const crawlPanel = $('#crawlPanel');
 
-  // عناصر التقدّم
   const crawlPbar = $('#crawlPbar');
   const crawlPcent = $('#crawlPcent');
   const crawlPhelp = $('#crawlPhelp');
@@ -280,7 +276,6 @@
   const previewPanel = $('#previewPanel');
   const modeSeg = $('#modeSeg');
 
-  // أزرار النسخة المبسّطة (يدوي فقط)
   const btnCopyIndexLite = $('#btnCopyIndexLite');
   const btnZipLite = $('#btnZipLite');
 
@@ -288,12 +283,15 @@
   const isManualOnly = /^(1|true|yes|on)$/i.test(qs.get('manualOnly') || '');
 
   let cancelFlag = false;
-  let currentMode = 'crawl'; // 'crawl' | 'manual'
+  let currentMode = 'crawl';
   let lastBuild = null;
 
-  /* ====== وظائف شريط التقدّم ====== */
-  const PROG_SOFT_CAP = 90; // لا نتجاوزها قبل اكتمال العملية
+  let aborter = null;
+
+  // ====== تقدم انسيابي ======
+  const PROG_SOFT_CAP = 96;
   let progVal = 0, progTimer = null;
+
   function renderCrawlProgress(p){
     const v = Math.max(0, Math.min(100, Math.round(p)));
     if(crawlPbar) crawlPbar.style.width = v + '%';
@@ -309,19 +307,23 @@
     progVal = 0; renderCrawlProgress(0);
     if(crawlPhelp) crawlPhelp.textContent = 'جاري الزحف…';
     progTimer = setInterval(()=>{
-      // تقدّم وهمي بسيط حتى 90%، ويتم رفعه لاحقًا بالقيم الحقيقية
-      progVal = Math.min(PROG_SOFT_CAP, progVal + Math.max(0.4, (PROG_SOFT_CAP - progVal)*0.06));
+      progVal = Math.min(PROG_SOFT_CAP, progVal + Math.max(0.35, (PROG_SOFT_CAP - progVal)*0.055));
       renderCrawlProgress(progVal);
     }, 200);
   }
-  function bumpCrawlProgressByRatio(ratio){
-    // ratio بين 0 و 1 (من حجم limit)
-    const exact = Math.max(0, Math.min(100, Math.round(ratio*100)));
-    if(exact > progVal){ progVal = exact; renderCrawlProgress(progVal); }
+  function bumpCrawlProgressLive(processed, queued, active, limit){
+    const denom = Math.max(1, processed + queued + active);
+    const liveRatio = processed / denom;
+    const clampTarget = Math.min(PROG_SOFT_CAP/100, liveRatio, limit ? processed/limit : liveRatio);
+    const exact = Math.max(0, Math.min(100, Math.round(clampTarget*100)));
+    if (exact > progVal) {
+      progVal = progVal*0.5 + exact*0.5;
+      renderCrawlProgress(progVal);
+    }
   }
   function finishCrawlProgress(){
     clearInterval(progTimer); progTimer = null;
-    const start = progVal, end = 100, dur = 500;
+    const start = progVal, end = 100, dur = 600;
     const t0 = performance.now();
     (function anim(now){
       const k = Math.min(1, (now - t0)/dur);
@@ -362,42 +364,52 @@
     return /\.(?:jpe?g|png|gif|webp|svg|bmp|ico|mp4|avi|mov|wmv|mkv|mp3|wav|pdf|zip|rar|7z|gz|css|js|woff2?|ttf|eot)(\?|#|$)/i.test(u);
   }
 
-  // ====== إعدادات البروكسي (شكل ?url=) ======
+  // ====== البروكسي ======
   const PROXY_PREFIX = 'https://sitemap-generator.anasshopify88.workers.dev';
-  function proxify(u){
-    return PROXY_PREFIX + '?url=' + encodeURIComponent(u);
-  }
+  const proxify = u => PROXY_PREFIX + '?url=' + encodeURIComponent(u);
 
-  async function fetchText(u){
+  async function fetchText(u, signal){
     try{
-      const r = await fetch(u, {credentials:'omit', cache:'no-cache', redirect:'follow'});
+      const r = await fetch(proxify(u), {credentials:'omit', cache:'no-cache', redirect:'follow', signal});
       if(r.ok) return await r.text();
     }catch{}
     try{
-      const r = await fetch(proxify(u), {credentials:'omit', cache:'no-cache', redirect:'follow'});
+      const r = await fetch(u, {credentials:'omit', cache:'no-cache', redirect:'follow', signal});
       if(r.ok) return await r.text();
     }catch{}
     throw new Error('تعذّر قراءة: '+u);
   }
-
-  async function fetchOk(u){
+  async function headResp(u, signal){
     try{
-      const r = await fetch(u, {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow'});
-      if(r.ok) return true;
+      const r = await fetch(proxify(u), {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow', signal});
+      if (r.ok) return r;
     }catch{}
     try{
-      const r = await fetch(proxify(u), {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow'});
-      if(r.ok) return true;
+      const r = await fetch(u, {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow', signal});
+      if (r.ok) return r;
     }catch{}
-    return false;
+    return null;
+  }
+  async function headOk(u, signal){
+    const r = await headResp(u, signal);
+    return !!r;
   }
 
   const sleep = ms => new Promise(r=> setTimeout(r, ms));
 
-  async function readRobots(origin){
+  // تنسيق lastmod إلى ISO
+  function toISODate(s){
+    if(!s) return null;
+    const d = new Date(s);
+    if (isNaN(d.getTime())) return null;
+    // Google تقبل التاريخ الكامل ISO8601، أو YYYY-MM-DD
+    return d.toISOString();
+  }
+
+  async function readRobots(origin, signal){
     const url = new URL('/robots.txt', origin).toString();
     try{
-      const txt = await fetchText(url);
+      const txt = await fetchText(url, signal);
       const lines = txt.split(/\r?\n/).map(l=>l.trim());
       const rules = {disallow:[], allow:[]};
       let active = false;
@@ -422,20 +434,117 @@
     }
   }
 
+  // قراءة خرائط الموقع كبذور + lastmod منها
+  async function readSitemapsSeeds(origin, signal){
+    const seedsSet = new Set();
+    const lastmods = new Map(); // url -> lastmod(ISO)
+    const tryUrls = [
+      new URL('/sitemap.xml', origin).toString(),
+      new URL('/sitemap_index.xml', origin).toString()
+    ];
+    for (const su of tryUrls){
+      try{
+        const ok = await headOk(su, signal);
+        if (!ok) continue;
+        const xml = await fetchText(su, signal);
+
+        // إذا كان sitemapindex
+        const smaps = Array.from(xml.matchAll(/<sitemap>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/sitemap>/gi));
+        if (smaps.length){
+          for(const m of smaps){
+            const u = m[1]; const lm = m[2];
+            if (u){ seedsSet.add(u); }
+          }
+          // حمل كل sitemap URLset
+          for (const m of smaps){
+            const loc = m[1];
+            try{
+              const xml2 = await fetchText(loc, signal);
+              const urls = Array.from(xml2.matchAll(/<url>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/url>/gi));
+              for (const u of urls){
+                const url = u[1]; const lm = toISODate(u[2]);
+                const n = normalize(url);
+                if(n){ seedsSet.add(n); if(lm) lastmods.set(n, lm); }
+              }
+            }catch{}
+          }
+          continue;
+        }
+
+        // أو URLSET مباشر
+        const urls = Array.from(xml.matchAll(/<url>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/url>/gi));
+        if (urls.length){
+          for (const m of urls){
+            const u = normalize(m[1]); const lm = toISODate(m[2]);
+            if(u){ seedsSet.add(u); if(lm) lastmods.set(u, lm); }
+          }
+        } else {
+          // ولو مجرد locs
+          const locs = Array.from(xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)).map(m=>m[1]);
+          for (const u of locs){
+            const n = normalize(u);
+            if(n) seedsSet.add(n);
+          }
+        }
+      }catch{}
+    }
+    return { seeds: Array.from(seedsSet).filter(Boolean), lastmods };
+  }
+
+  // إثراء lastmod عبر HEAD (مخثّر)
+  async function enrichLastMods(urls, knownMap, signal){
+    const out = new Map(knownMap); // ننسخ المعروفة
+    const CONC = 6;
+    let i = 0;
+    async function worker(){
+      while(i < urls.length && !cancelFlag){
+        const idx = i++; const u = urls[idx];
+        if (out.has(u)) continue;
+        try{
+          const r = await headResp(u, signal);
+          const lm = r?.headers?.get('Last-Modified');
+          const iso = toISODate(lm);
+          if(iso) out.set(u, iso);
+        }catch{}
+      }
+    }
+    await Promise.all(Array.from({length:CONC}, worker));
+    return out;
+  }
+
   async function crawlDomain(start, limit=2000){
     const origin = new URL(start).origin;
-    const allowPath = await readRobots(origin);
-    const q = [ normalize(start) ];
+    aborter = new AbortController();
+    const { signal } = aborter;
+
+    const allowPath = await readRobots(origin, signal);
+
+    const q = [];
     const seen = new Set();
     const out = new Set();
+
+    // lastmod لكل رابط
+    let urlLastmods = new Map();
+
+    // بذور من خرائط الموقع
+    try{
+      const { seeds, lastmods } = await readSitemapsSeeds(origin, signal);
+      urlLastmods = lastmods;
+      for(const s of seeds){
+        if (s && sameHost(s, origin) && !extBlocked(s)) q.push(s);
+      }
+    }catch{}
+
+    const normalizedStart = normalize(start);
+    if(normalizedStart && !q.includes(normalizedStart)) q.unshift(normalizedStart);
 
     const EXCLUDE_PATTERNS = [
       /\/(cart|checkout|login|account|orders|admin|wp-admin|cdn-cgi)(\/|$)/i,
       /(^|\/)(tag|tags)(\/|$)/i
     ];
 
-    const CONCURRENCY = 3;
-    let active = 0;
+    const CONCURRENCY = 4;
+    let active = 0, processed = 0;
 
     updateStatus('بدء الزحف…');
 
@@ -447,11 +556,11 @@
 
         try{
           const uo = new URL(url);
-          if(!allowPath(uo.pathname)) continue;
-          if(EXCLUDE_PATTERNS.some(rx=> rx.test(uo.pathname))) continue;
+          if(!allowPath(uo.pathname)) { processed++; continue; }
+          if(EXCLUDE_PATTERNS.some(rx=> rx.test(uo.pathname))) { processed++; continue; }
 
           active++;
-          const html = await fetchText(url);
+          const html = await fetchText(url, signal);
 
           let canonical = null;
           try{
@@ -459,9 +568,7 @@
             const doc = parser.parseFromString(html, 'text/html');
 
             const metaRobots = doc.querySelector('meta[name="robots"]');
-            if(metaRobots && /noindex/i.test(metaRobots.getAttribute('content')||'')){
-              // تجاهل لو noindex
-            } else {
+            if(!(metaRobots && /noindex/i.test(metaRobots.getAttribute('content')||''))){
               const linkCanonical = doc.querySelector('link[rel="canonical"]');
               if(linkCanonical && linkCanonical.href){
                 canonical = normalize(linkCanonical.href);
@@ -475,7 +582,6 @@
                 if(extBlocked(abs)) continue;
                 const n = normalize(abs);
                 if(!n || seen.has(n) || out.size + q.length >= limit) continue;
-
                 try{
                   const pn = new URL(n).pathname;
                   if(EXCLUDE_PATTERNS.some(rx=> rx.test(pn))) continue;
@@ -498,16 +604,12 @@
             }
           }
 
-          updateStatus(`مكتشفة: ${out.size} / قيد المعالجة: ${q.length} روابط`);
-          // تحديث شريط التقدّم (نعتمد على limit كحد أعلى)
-          bumpCrawlProgressByRatio(out.size / Math.max(1, limit));
+          processed++;
+          updateStatus(`مكتشفة: ${out.size} | بالانتظار: ${q.length} | قيد المعالجة: ${active}`);
+          bumpCrawlProgressLive(out.size, q.length, active, limit);
 
-          await sleep(150);
-        }catch(e){
-          // تجاهل أخطاء الصفحة الواحدة
-        }finally{
-          active--;
-        }
+          await sleep(120);
+        }catch{} finally { active--; }
       }
     }
 
@@ -524,8 +626,18 @@
       })
     ]);
 
-    if(cancelFlag) cancelFlag = false;
-    return Array.from(out);
+    if(cancelFlag){ cancelFlag = false; try{ aborter?.abort(); }catch{} }
+    aborter = null;
+
+    // بعد اكتمال الزحف: نحصل على Last-Modified عبر HEAD للروابط التي لا نعرفها
+    const urlsArr = Array.from(out);
+    try{
+      const enriched = await enrichLastMods(urlsArr, urlLastmods, undefined);
+      urlLastmods = enriched;
+    }catch{}
+
+    // نرجع: {urls, lastmods}
+    return { urls: urlsArr, lastmods: urlLastmods };
   }
 
   function parseInputsFromList(lines){
@@ -535,14 +647,13 @@
       const nu = normalize(u);
       if(nu && !seen.has(nu)){
         seen.add(nu);
-        out.push({ url: nu, changefreq: 'daily' });
+        out.push({ url: nu, changefreq: 'daily', lastmod: null });
       }
     }
     return out;
   }
 
-  function buildSitemapsFromUrls(urls){
-    const records = parseInputsFromList(urls);
+  function buildSitemapsFromRecords(records){
     const CHUNK = 50000;
     const chunks = [];
     for(let i=0;i<records.length;i+=CHUNK){
@@ -553,9 +664,8 @@
     const urlsetOpen = () => `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="${nsBase}">\n`;
     const urlEntry = it => {
       let xml = `  <url>\n    <loc>${escapeXml(it.url)}</loc>\n`;
-      if(it.changefreq){
-        xml += `    <changefreq>${escapeXml(it.changefreq)}</changefreq>\n`;
-      }
+      if(it.lastmod){ xml += `    <lastmod>${escapeXml(it.lastmod)}</lastmod>\n`; }
+      if(it.changefreq){ xml += `    <changefreq>${escapeXml(it.changefreq)}</changefreq>\n`; }
       xml += `  </url>\n`;
       return xml;
     };
@@ -572,7 +682,7 @@
     let indexXml = '';
     if(files.length > 1){
       indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="${nsBase}">\n`;
-      const last = new Date().toISOString().slice(0,10);
+      const last = new Date().toISOString();
       for(const f of files){
         indexXml += `  <sitemap>\n    <loc>${escapeXml(f.name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n`;
       }
@@ -605,8 +715,10 @@
     sumSize.textContent = (approxSize / 1024).toFixed(1) + ' KB';
 
     if(files.length){
-      const first = files[0].xml;
-      code.textContent = first.slice(0,6000);
+      // ✨ عرض كامل لكل الملفات في المعاينة
+      const allXml = files.map(f => `<!-- ${f.name} -->\n${f.xml}`).join('\n\n');
+      code.textContent = allXml;
+
       for(const f of files){
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([f.xml], {type:'application/xml'}));
@@ -631,14 +743,15 @@
       updatePreview({files:[], indexXml:'', count:0, approxSize:0, errors:[]});
       return;
     }
-    const sitemapObj = buildSitemapsFromUrls(lines);
+    const records = parseInputsFromList(lines);
+    const sitemapObj = buildSitemapsFromRecords(records);
     updatePreview(sitemapObj);
     if(!isManualOnly){
       updateStatus(`تم البناء من الإدخال اليدوي. مجموع الروابط بعد التنظيف: ${sitemapObj.count}.`);
     }
   }
 
-  // ========= وضع "زحف تلقائي" =========
+  // ========= زحف تلقائي =========
   btnCrawl.addEventListener('click', async () => {
     if(currentMode !== 'crawl'){
       updateStatus('وضع الإدخال اليدوي مُفعل، فعّل "زحف تلقائي" للزحف.');
@@ -657,14 +770,15 @@
 
     try {
       const limit = 2000;
-      const urls = await crawlDomain(start, limit);
+      const { urls, lastmods } = await crawlDomain(start, limit);
       updateStatus(`تم اكتشاف ${urls.length} رابط بعد الزحف.`);
-      bumpCrawlProgressByRatio(1); // ضمان الوصول 100% منطقيًا
-      finishCrawlProgress();
 
-      txtLinks.value = urls.join('\n');
-      const sitemapObj = buildSitemapsFromUrls(urls);
+      // نبني سجلات مع lastmod المعروفة
+      const records = urls.map(u => ({ url: u, changefreq: 'daily', lastmod: lastmods.get(u) || null }));
+      const sitemapObj = buildSitemapsFromRecords(records);
       updatePreview(sitemapObj);
+
+      finishCrawlProgress();
       updateStatus(`تم! مجموع الروابط بعد التنظيف: ${sitemapObj.count}.`);
     } catch(e){
       updateStatus('فشل أثناء الزحف: ' + (e.message || e));
@@ -678,11 +792,12 @@
 
   btnCancel.addEventListener('click', () => {
     cancelFlag = true;
+    try{ aborter?.abort(); }catch{}
     updateStatus('تم الإلغاء.');
     resetCrawlProgress();
   });
 
-  // ========= وضع "إدخال يدوي" =========
+  // ========= إدخال يدوي =========
   btnBuildManual.addEventListener('click', buildFromManual);
   txtLinks.addEventListener('keydown', (e)=>{
     if(currentMode==='manual' && (e.metaKey||e.ctrlKey) && e.key==='Enter'){
@@ -747,7 +862,6 @@
     downloadBlob(blob, `sitemaps-${ts}.zip`);
   });
 
-  // ربط الأزرار المبسطة بنفس الأفعال
   btnCopyIndexLite.addEventListener('click', () => btnCopyIndex.click());
   btnZipLite.addEventListener('click', () => btnZip.click());
 
@@ -761,9 +875,7 @@
     a.remove();
   }
 
-  function updateStatus(msg){
-    crawlStatus.textContent = msg || '';
-  }
+  function updateStatus(msg){ crawlStatus.textContent = msg || ''; }
 
   // ====== منشئ ZIP ======
   function buildZipBlob(files){
@@ -822,20 +934,18 @@
     return new Blob([all], {type:'application/zip'});
   }
 
-  // ====== تبديل الوضع واجهةً ======
+  // ====== تبديل الوضع ======
   function applyModeUi(){
     if(modeCrawl.checked){ currentMode = 'crawl'; }
     if(modeManual.checked){ currentMode = 'manual'; }
 
     const isManual = currentMode === 'manual';
 
-    // لوحة الزحف
     startUrlEl.disabled = isManual;
     btnCrawl.disabled = isManual;
     btnCancel.disabled = true;
     crawlBadge.style.display = 'none';
 
-    // منطقة الروابط
     txtLinks.readOnly = !isManual;
     txtLinks.placeholder = isManual
       ? 'ألصق الروابط يدوياً هنا… ضع كل رابط في سطر مستقل.'
@@ -848,7 +958,6 @@
 
     btnBuildManual.disabled = !isManual || txtLinks.value.trim().length===0;
 
-    // ⛔️ تم حذف عبارة "وضع الزحف مُفعّل."
     updateStatus(isManual ? 'وضع الإدخال اليدوي مُفعّل.' : '');
     if(!isManual) resetCrawlProgress();
   }
@@ -874,7 +983,6 @@
     updateStatus('وضع الإدخال اليدوي فقط (بدون معاينة) مُفعّل.');
   }
 
-  // ترتيب التهيئة
   modeCrawl.addEventListener('change', applyModeUi);
   modeManual.addEventListener('change', applyModeUi);
   applyModeUi();
