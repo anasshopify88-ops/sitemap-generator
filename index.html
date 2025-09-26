@@ -129,7 +129,8 @@
       <div class="titleRow">
         <div>
           <h1>آداة منشئ خريطة الموقع (Sitemap) المجانية</h1>
-          <div class="sub">ملاحظة: الزحف الكامل دَوْميّن فقط (domain crawl) مع حد أقصى 2000 رابط.</div>
+          <!-- ✅ تم استبدال النص وربط عبارة "تفعيل خريطة الموقع" -->
+          <div class="sub">اطلب خدمة <a href="https://anasrashed.com/ZqyGaBZ">تفعيل خريطة الموقع</a> وسيتم بناء وتفعيل الخريطة خلال 24 ساعة</div>
         </div>
         <img class="logo title-logo" src="https://i.imgur.com/meUEoP7.png" alt="الشعار"
              onerror="this.onerror=null; this.src='https://i.imgur.com/meUEoP7.jpg';">
@@ -336,7 +337,6 @@
 
   function resolveUrl(u){
     u=(u||'').trim();
-    if(!u) return null;
     const m = u.match(/\s#.*$/);
     if(m) u = u.slice(0, m.index).trim();
     if(/^https?:\/\//i.test(u)) return u;
