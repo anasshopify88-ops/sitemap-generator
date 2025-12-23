@@ -25,7 +25,7 @@
       -webkit-font-smoothing:antialiased; overflow-x:hidden; font-size:var(--fs-base);
     }
     .wrap{max-width:1200px;margin:0 auto;padding:24px 16px 64px}
-    .topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+    .topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px; flex-wrap:wrap}
     .btn{
       border:1px solid var(--border); background:linear-gradient(180deg,#fff,#f9fbff);
       color:var(--text); padding:8px 12px; border-radius:14px; cursor:pointer;
@@ -39,6 +39,20 @@
     .btn.ok{background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; border-color:transparent}
     .btn.home{background:#000; color:#fff; border-color:#000}
     .btn:disabled{opacity:.6; cursor:not-allowed}
+
+    /* ✅ زر تواصل معي في التوب بار */
+    .btn.contactTop{
+      background: var(--accent);
+      border-color: var(--accent);
+      color:#fff;
+      justify-content:center;
+    }
+    .btn.contactTop:hover{
+      background: var(--accent);
+      border-color: var(--accent);
+      color:#fff;
+    }
+
     .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); min-width:0}
     .titleRow{display:flex;align-items:center;gap:10px;justify-content:space-between; min-width:0}
     h1{margin:0;font-size:clamp(18px,2.2vw,24px);font-weight:800;letter-spacing:.2px}
@@ -50,6 +64,7 @@
     .avatar{width:112px;height:112px;border-radius:50%;background:#fff;padding:6px;object-fit:contain;object-position:center;border:1px solid var(--border);align-self:center}
     .logo{width:100%; max-width:180px; align-self:center; object-fit:contain; object-position:center; background:#fff; border-radius:12px; border:1px solid var(--border); padding:8px}
     .title-logo{width:180px; max-width:180px; align-self:center}
+
     .s-list{display:grid; gap:8px}
     .s-item a{
       display:block; padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff;
@@ -58,7 +73,14 @@
       overflow-wrap:anywhere; word-break:break-word;
     }
     .s-item a:hover{transform:translateY(-2px); border-color:#cbd5e1; box-shadow:0 8px 18px rgba(15,23,42,.08)}
-    .s-caption{color:var(--muted); font-size:11.5px; margin-top:-2px; align-self:center}
+
+    /* ✅ نص بدون رابط بنفس ستايل الروابط */
+    .s-text{
+      display:block; padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff;
+      color:#0f172a; font-weight:600; box-shadow:0 4px 12px rgba(15,23,42,.05); font-size:13px;
+      overflow-wrap:anywhere; word-break:break-word;
+    }
+
     #toolBox{display:flex; flex-direction:column; gap:10px; min-height:0}
     .panel.card label{display:block; font-size:14px; margin-bottom:6px}
     textarea{
@@ -99,14 +121,6 @@
     .status{font-size:12px; color:#5b6472; margin-top:6px; overflow-wrap:anywhere; word-break:break-word}
     .badge{display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-weight:700; font-size:11px}
 
-    /* مبدّل الوضع */
-    .seg{display:inline-flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:999px; background:#f1f5fb; overflow:hidden}
-    .seg input{display:none}
-    .seg label{padding:6px 10px; cursor:pointer; user-select:none; font-weight:800; font-size:12px; color:#5b6472;}
-    .seg input:checked + label{
-      background:#fff; color:#0c1424; border:1px solid var(--border); margin:-1px; border-radius:999px; box-shadow:var(--shadow);
-    }
-
     /* شريط التقدّم */
     .crawl-progress{margin-top:10px; display:flex; flex-direction:column; gap:6px;}
     .progressbar{height:12px; background:#eef2ff; border:1px solid var(--border); border-radius:999px; overflow:hidden;}
@@ -123,13 +137,15 @@
     <nav class="topbar">
       <button class="btn" type="button" onclick="history.back()">رجوع</button>
       <a class="btn home" href="https://anasrashed.com" rel="noopener">الرئيسية</a>
+
+      <!-- ✅ تواصل معي في التوب بار بدل ما يكون بالسايدبار -->
+      <a class="btn contactTop" href="https://contact.anasrashed.com" target="_blank" rel="noopener">تواصل معي</a>
     </nav>
 
     <div class="card">
       <div class="titleRow">
         <div>
           <h1>آداة منشئ خريطة الموقع (Sitemap) المجانية</h1>
-          <!-- ✅ تم استبدال النص وربط عبارة "تفعيل خريطة الموقع" -->
           <div class="sub">اطلب خدمة <a href="https://anasrashed.com/ZqyGaBZ">تفعيل خريطة الموقع</a> وسيتم بناء وتفعيل الخريطة خلال 24 ساعة</div>
         </div>
         <img class="logo title-logo" src="https://i.imgur.com/meUEoP7.png" alt="الشعار"
@@ -142,17 +158,41 @@
         <div class="card sidebar-card">
           <img class="avatar" src="https://i.imgur.com/B3UkEQ0.jpg" alt="صورتي" referrerpolicy="no-referrer"
                onerror="this.onerror=null; this.src='https://i.imgur.com/B3UkEQ0.png';">
+
           <div class="s-list">
+            <!-- ✅ 1) من أنا -->
             <div class="s-item"><a href="https://whoami.anasrashed.com" target="_blank" rel="noopener">من أنا؟</a></div>
-            <div class="s-item"><a href="https://anasrashed.com/wAXpVym" target="_blank" rel="noopener">دليل السيو الشامل</a></div>
-            <div class="s-item"><a href="https://anasrashed.com/eQvbbqP" target="_blank" rel="noopener">أفضل باك لينك</a></div>
-            <div class="s-item"><a href="https://anasrashed.com/NApDQYD" target="_blank" rel="noopener">حملة باك لينك شهرية</a></div>
-            <div class="s-item"><a href="https://anasrashed.com/ZqyGaBZ" target="_blank" rel="noopener">حل مشكلة خريطة الموقع للباقة بلس</a></div>
+
+            <!-- ✅ 2) كتاب دليل السيو الشامل -->
+            <div class="s-item">
+              <a href="https://anasrashed.gumroad.com/l/seo-book-for-ecommerce" target="_blank" rel="noopener">
+                كتاب دليل السيو الشامل
+              </a>
+            </div>
+
+            <!-- ✅ 3) خدماتي -->
+            <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;">
+              <b>خدماتي</b>
+            </div>
+
+            <!-- ✅ خدمات بدون روابط -->
+            <div class="s-item"><span class="s-text">تحسين سيو المتجر</span></div>
+            <div class="s-item"><span class="s-text">حملة باك لينك شهرية</span></div>
+            <div class="s-item"><span class="s-text">استخراج الكلمات المفتاحية للمنافسين</span></div>
+            <div class="s-item"><span class="s-text">تفعيل خريطة الموقع للباقة بلس</span></div>
+
+            <!-- ✅ 4) أدوات سيو احترافية -->
+            <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;">
+              <b>أدوات سيو احترافية</b>
+            </div>
+
+            <!-- ✅ الأدوات بنفس روابطها -->
             <div class="s-item"><a href="https://serp.anasrashed.com" target="_blank" rel="noopener">أداة SERP بالذكاء الإصطناعي</a></div>
             <div class="s-item"><a href="https://smg.anasrashed.com" target="_blank" rel="noopener">أداة منشئ خريطة الموقع</a></div>
-            <div class="s-item"><a href="https://anasrashed.com/blog" target="_blank" rel="noopener">تعلم أكثر</a></div>
-            <div class="s-item"><a href="https://anasrashed.com/توثيق-التجارة-الإلكترونية/page-1494027497" target="_blank" rel="noopener">توثيق التجارة الإلكترونية</a></div>
-            <div class="s-item"><a href="https://contact.anasrashed.com" target="_blank" rel="noopener">تواصل معي</a></div>
+            <div class="s-item"><a href="https://keywords.anasrashed.com" target="_blank" rel="noopener">أداة الكلمات المفتاحية</a></div>
+            <div class="s-item"><a href="https://checker.anasrashed.com" target="_blank" rel="noopener">أداة فحص الموقع</a></div>
+
+            <!-- ❌ تم حذف: أفضل باك لينك / تعلم أكثر / توثيق التجارة الإلكترونية / تواصل معي من السايدبار -->
           </div>
         </div>
       </aside>
@@ -289,7 +329,6 @@
 
   let aborter = null;
 
-  // ====== تقدم انسيابي ======
   const PROG_SOFT_CAP = 96;
   let progVal = 0, progTimer = null;
 
@@ -364,7 +403,6 @@
     return /\.(?:jpe?g|png|gif|webp|svg|bmp|ico|mp4|avi|mov|wmv|mkv|mp3|wav|pdf|zip|rar|7z|gz|css|js|woff2?|ttf|eot)(\?|#|$)/i.test(u);
   }
 
-  // ====== البروكسي ======
   const PROXY_PREFIX = 'https://sitemap-generator.anasshopify88.workers.dev';
   const proxify = u => PROXY_PREFIX + '?url=' + encodeURIComponent(u);
 
@@ -397,12 +435,10 @@
 
   const sleep = ms => new Promise(r=> setTimeout(r, ms));
 
-  // تنسيق lastmod إلى ISO
   function toISODate(s){
     if(!s) return null;
     const d = new Date(s);
     if (isNaN(d.getTime())) return null;
-    // Google تقبل التاريخ الكامل ISO8601، أو YYYY-MM-DD
     return d.toISOString();
   }
 
@@ -434,10 +470,9 @@
     }
   }
 
-  // قراءة خرائط الموقع كبذور + lastmod منها
   async function readSitemapsSeeds(origin, signal){
     const seedsSet = new Set();
-    const lastmods = new Map(); // url -> lastmod(ISO)
+    const lastmods = new Map();
     const tryUrls = [
       new URL('/sitemap.xml', origin).toString(),
       new URL('/sitemap_index.xml', origin).toString()
@@ -448,14 +483,12 @@
         if (!ok) continue;
         const xml = await fetchText(su, signal);
 
-        // إذا كان sitemapindex
         const smaps = Array.from(xml.matchAll(/<sitemap>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/sitemap>/gi));
         if (smaps.length){
           for(const m of smaps){
-            const u = m[1]; const lm = m[2];
+            const u = m[1];
             if (u){ seedsSet.add(u); }
           }
-          // حمل كل sitemap URLset
           for (const m of smaps){
             const loc = m[1];
             try{
@@ -471,7 +504,6 @@
           continue;
         }
 
-        // أو URLSET مباشر
         const urls = Array.from(xml.matchAll(/<url>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/url>/gi));
         if (urls.length){
           for (const m of urls){
@@ -479,7 +511,6 @@
             if(u){ seedsSet.add(u); if(lm) lastmods.set(u, lm); }
           }
         } else {
-          // ولو مجرد locs
           const locs = Array.from(xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)).map(m=>m[1]);
           for (const u of locs){
             const n = normalize(u);
@@ -491,9 +522,8 @@
     return { seeds: Array.from(seedsSet).filter(Boolean), lastmods };
   }
 
-  // إثراء lastmod عبر HEAD (مخثّر)
   async function enrichLastMods(urls, knownMap, signal){
-    const out = new Map(knownMap); // ننسخ المعروفة
+    const out = new Map(knownMap);
     const CONC = 6;
     let i = 0;
     async function worker(){
@@ -523,10 +553,8 @@
     const seen = new Set();
     const out = new Set();
 
-    // lastmod لكل رابط
     let urlLastmods = new Map();
 
-    // بذور من خرائط الموقع
     try{
       const { seeds, lastmods } = await readSitemapsSeeds(origin, signal);
       urlLastmods = lastmods;
@@ -629,14 +657,12 @@
     if(cancelFlag){ cancelFlag = false; try{ aborter?.abort(); }catch{} }
     aborter = null;
 
-    // بعد اكتمال الزحف: نحصل على Last-Modified عبر HEAD للروابط التي لا نعرفها
     const urlsArr = Array.from(out);
     try{
       const enriched = await enrichLastMods(urlsArr, urlLastmods, undefined);
       urlLastmods = enriched;
     }catch{}
 
-    // نرجع: {urls, lastmods}
     return { urls: urlsArr, lastmods: urlLastmods };
   }
 
@@ -715,7 +741,6 @@
     sumSize.textContent = (approxSize / 1024).toFixed(1) + ' KB';
 
     if(files.length){
-      // ✨ عرض كامل لكل الملفات في المعاينة
       const allXml = files.map(f => `<!-- ${f.name} -->\n${f.xml}`).join('\n\n');
       code.textContent = allXml;
 
@@ -751,7 +776,6 @@
     }
   }
 
-  // ========= زحف تلقائي =========
   btnCrawl.addEventListener('click', async () => {
     if(currentMode !== 'crawl'){
       updateStatus('وضع الإدخال اليدوي مُفعل، فعّل "زحف تلقائي" للزحف.');
@@ -773,7 +797,6 @@
       const { urls, lastmods } = await crawlDomain(start, limit);
       updateStatus(`تم اكتشاف ${urls.length} رابط بعد الزحف.`);
 
-      // نبني سجلات مع lastmod المعروفة
       const records = urls.map(u => ({ url: u, changefreq: 'daily', lastmod: lastmods.get(u) || null }));
       const sitemapObj = buildSitemapsFromRecords(records);
       updatePreview(sitemapObj);
@@ -797,7 +820,6 @@
     resetCrawlProgress();
   });
 
-  // ========= إدخال يدوي =========
   btnBuildManual.addEventListener('click', buildFromManual);
   txtLinks.addEventListener('keydown', (e)=>{
     if(currentMode==='manual' && (e.metaKey||e.ctrlKey) && e.key==='Enter'){
@@ -812,7 +834,6 @@
     }
   });
 
-  // ========= عام =========
   btnClear.addEventListener('click', () => {
     txtLinks.value = '';
     sumCount.textContent = '0';
@@ -877,7 +898,6 @@
 
   function updateStatus(msg){ crawlStatus.textContent = msg || ''; }
 
-  // ====== منشئ ZIP ======
   function buildZipBlob(files){
     const encoder = new TextEncoder();
     const writeU32 = (buf, off, v) => { buf[off]=v&255; buf[off+1]=(v>>>8)&255; buf[off+2]=(v>>>16)&255; buf[off+3]=(v>>>24)&255; };
@@ -934,7 +954,6 @@
     return new Blob([all], {type:'application/zip'});
   }
 
-  // ====== تبديل الوضع ======
   function applyModeUi(){
     if(modeCrawl.checked){ currentMode = 'crawl'; }
     if(modeManual.checked){ currentMode = 'manual'; }
