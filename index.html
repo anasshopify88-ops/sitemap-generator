@@ -160,39 +160,31 @@
                onerror="this.onerror=null; this.src='https://i.imgur.com/B3UkEQ0.png';">
 
           <div class="s-list">
-            <!-- ✅ 1) من أنا -->
             <div class="s-item"><a href="https://whoami.anasrashed.com" target="_blank" rel="noopener">من أنا؟</a></div>
 
-            <!-- ✅ 2) كتاب دليل السيو الشامل -->
             <div class="s-item">
               <a href="https://anasrashed.gumroad.com/l/seo-book-for-ecommerce" target="_blank" rel="noopener">
                 كتاب دليل السيو الشامل
               </a>
             </div>
 
-            <!-- ✅ 3) خدماتي -->
             <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;">
               <b>خدماتي</b>
             </div>
 
-            <!-- ✅ خدمات بدون روابط -->
             <div class="s-item"><span class="s-text">تحسين سيو المتجر</span></div>
             <div class="s-item"><span class="s-text">حملة باك لينك شهرية</span></div>
             <div class="s-item"><span class="s-text">استخراج الكلمات المفتاحية للمنافسين</span></div>
             <div class="s-item"><span class="s-text">تفعيل خريطة الموقع للباقة بلس</span></div>
 
-            <!-- ✅ 4) أدوات سيو احترافية -->
             <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;">
               <b>أدوات سيو احترافية</b>
             </div>
 
-            <!-- ✅ الأدوات بنفس روابطها -->
             <div class="s-item"><a href="https://serp.anasrashed.com" target="_blank" rel="noopener">أداة SERP بالذكاء الإصطناعي</a></div>
             <div class="s-item"><a href="https://smg.anasrashed.com" target="_blank" rel="noopener">أداة منشئ خريطة الموقع</a></div>
             <div class="s-item"><a href="https://keywords.anasrashed.com" target="_blank" rel="noopener">أداة الكلمات المفتاحية</a></div>
             <div class="s-item"><a href="https://checker.anasrashed.com" target="_blank" rel="noopener">أداة فحص الموقع</a></div>
-
-            <!-- ❌ تم حذف: أفضل باك لينك / تعلم أكثر / توثيق التجارة الإلكترونية / تواصل معي من السايدبار -->
           </div>
         </div>
       </aside>
@@ -225,7 +217,7 @@
           <div id="crawlStatus" class="status"></div>
         </section>
 
-        <!-- لوحة الروابط: زحف/يدوي -->
+        <!-- لوحة الروابط (عرض الروابط المكتشفة فقط) -->
         <section class="panel card">
           <div class="row" style="justify-content:space-between; align-items:flex-end">
             <div>
@@ -233,20 +225,11 @@
               <div class="hint" id="modeHint">سيتم عرض الروابط المكتشفة هنا بعد الزحف.</div>
             </div>
             <div class="row">
-              <div class="seg" role="tablist" aria-label="طريقة الإدخال" id="modeSeg">
-                <input type="radio" name="mode" id="modeCrawl" value="crawl" checked>
-                <label for="modeCrawl" role="tab" aria-controls="txtLinks">زحف تلقائي</label>
-                <input type="radio" name="mode" id="modeManual" value="manual">
-                <label for="modeManual" role="tab" aria-controls="txtLinks">إدخال يدوي</label>
-              </div>
-              <button id="btnBuildManual" class="btn primary" type="button" disabled>بناء من الروابط</button>
-              <button id="btnCopyIndexLite" class="btn" type="button" style="display:none" disabled>نسخ sitemap_index.xml</button>
-              <button id="btnZipLite" class="btn ok" type="button" style="display:none" disabled>تنزيل ZIP</button>
               <button id="btnClear" class="btn" type="button">مسح</button>
             </div>
           </div>
 
-          <textarea id="txtLinks" dir="ltr" placeholder="هنا تُعرض الروابط بعد الزحف ..."></textarea>
+          <textarea id="txtLinks" dir="ltr" readonly placeholder="هنا تُعرض الروابط بعد الزحف ..."></textarea>
         </section>
 
         <!-- لوحة المعاينة والتحميل -->
@@ -309,28 +292,15 @@
   const crawlPcent = $('#crawlPcent');
   const crawlPhelp = $('#crawlPhelp');
 
-  const modeCrawl = $('#modeCrawl');
-  const modeManual = $('#modeManual');
-  const btnBuildManual = $('#btnBuildManual');
-  const lblLinksHeader = $('#lblLinksHeader');
-  const modeHint = $('#modeHint');
-  const previewPanel = $('#previewPanel');
-  const modeSeg = $('#modeSeg');
-
-  const btnCopyIndexLite = $('#btnCopyIndexLite');
-  const btnZipLite = $('#btnZipLite');
-
-  const qs = new URLSearchParams(location.search);
-  const isManualOnly = /^(1|true|yes|on)$/i.test(qs.get('manualOnly') || '');
-
   let cancelFlag = false;
-  let currentMode = 'crawl';
   let lastBuild = null;
-
   let aborter = null;
 
   const PROG_SOFT_CAP = 96;
   let progVal = 0, progTimer = null;
+
+  /* ✅ الرسالة التي تُضاف أعلى ملفات XML */
+  const SITEMAP_BUILDER_COMMENT = '<!-- https://smg.anasrashed.com تم إنشاء خريطة الموقع بواسطة أداة منشئ خريطة الموقع المجانية الخاصة بـ أنس راشد   -->';
 
   function renderCrawlProgress(p){
     const v = Math.max(0, Math.min(100, Math.round(p)));
@@ -440,6 +410,34 @@
     const d = new Date(s);
     if (isNaN(d.getTime())) return null;
     return d.toISOString();
+  }
+  function nowIso(){
+    return new Date().toISOString();
+  }
+
+  /* ✅ priority:
+     - الرئيسية: 1.00
+     - التصنيفات: 0.80
+     - الصفحات تحت التصنيفات: 0.64
+     (عدّل كلمات التصنيفات حسب منصتك إذا احتجت)
+  */
+  function calcPriority(urlStr){
+    try{
+      const u = new URL(urlStr);
+      const p = (u.pathname || '/').toLowerCase();
+
+      if (p === '/' || p === '') return '1.00';
+
+      const isCategory =
+        /^\/(collections|collection|categories|category|c)\//.test(p) ||
+        p === '/collections' || p === '/categories';
+
+      if (isCategory) return '0.80';
+
+      return '0.64';
+    }catch{
+      return '0.64';
+    }
   }
 
   async function readRobots(origin, signal){
@@ -666,19 +664,6 @@
     return { urls: urlsArr, lastmods: urlLastmods };
   }
 
-  function parseInputsFromList(lines){
-    const seen = new Set();
-    const out = [];
-    for(const u of lines){
-      const nu = normalize(u);
-      if(nu && !seen.has(nu)){
-        seen.add(nu);
-        out.push({ url: nu, changefreq: 'daily', lastmod: null });
-      }
-    }
-    return out;
-  }
-
   function buildSitemapsFromRecords(records){
     const CHUNK = 50000;
     const chunks = [];
@@ -687,11 +672,14 @@
     }
 
     const nsBase = 'http://www.sitemaps.org/schemas/sitemap/0.9';
-    const urlsetOpen = () => `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="${nsBase}">\n`;
+
+    const urlsetOpen = () => `<?xml version="1.0" encoding="UTF-8"?>\n${SITEMAP_BUILDER_COMMENT}\n<urlset xmlns="${nsBase}">\n`;
+
     const urlEntry = it => {
       let xml = `  <url>\n    <loc>${escapeXml(it.url)}</loc>\n`;
-      if(it.lastmod){ xml += `    <lastmod>${escapeXml(it.lastmod)}</lastmod>\n`; }
+      xml += `    <lastmod>${escapeXml(it.lastmod || nowIso())}</lastmod>\n`;
       if(it.changefreq){ xml += `    <changefreq>${escapeXml(it.changefreq)}</changefreq>\n`; }
+      xml += `    <priority>${escapeXml(it.priority || calcPriority(it.url))}</priority>\n`;
       xml += `  </url>\n`;
       return xml;
     };
@@ -707,8 +695,8 @@
 
     let indexXml = '';
     if(files.length > 1){
-      indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="${nsBase}">\n`;
-      const last = new Date().toISOString();
+      indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n${SITEMAP_BUILDER_COMMENT}\n<sitemapindex xmlns="${nsBase}">\n`;
+      const last = nowIso();
       for(const f of files){
         indexXml += `  <sitemap>\n    <loc>${escapeXml(f.name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n`;
       }
@@ -723,16 +711,6 @@
   function updatePreview(filesObj){
     const { files, indexXml, count, approxSize } = filesObj;
     lastBuild = { files, indexXml };
-
-    if(isManualOnly){
-      const hasFiles = files.length > 0;
-      btnZipLite.disabled = !hasFiles;
-      btnCopyIndexLite.disabled = !hasFiles;
-      updateStatus(hasFiles
-        ? `تم البناء من الإدخال اليدوي. مجموع الروابط بعد التنظيف: ${count}.`
-        : 'لا يوجد ملفات بعد.');
-      return;
-    }
 
     links.innerHTML = '';
     errorsBox.style.display = 'none';
@@ -761,26 +739,7 @@
     btnCopyIndex.disabled = files.length === 0;
   }
 
-  function buildFromManual(){
-    const lines = txtLinks.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
-    if(!lines.length){
-      updateStatus('لم يتم إدخال أي روابط. ألصق كل رابط في سطر ثم اضغط "بناء من الروابط".');
-      updatePreview({files:[], indexXml:'', count:0, approxSize:0, errors:[]});
-      return;
-    }
-    const records = parseInputsFromList(lines);
-    const sitemapObj = buildSitemapsFromRecords(records);
-    updatePreview(sitemapObj);
-    if(!isManualOnly){
-      updateStatus(`تم البناء من الإدخال اليدوي. مجموع الروابط بعد التنظيف: ${sitemapObj.count}.`);
-    }
-  }
-
   btnCrawl.addEventListener('click', async () => {
-    if(currentMode !== 'crawl'){
-      updateStatus('وضع الإدخال اليدوي مُفعل، فعّل "زحف تلقائي" للزحف.');
-      return;
-    }
     const start = resolveUrl(startUrlEl.value);
     if(!start){
       updateStatus('فضلاً أدخل رابط الموقع صحيح يبدأ بـ https:// أو http://');
@@ -795,9 +754,17 @@
     try {
       const limit = 2000;
       const { urls, lastmods } = await crawlDomain(start, limit);
-      updateStatus(`تم اكتشاف ${urls.length} رابط بعد الزحف.`);
 
-      const records = urls.map(u => ({ url: u, changefreq: 'daily', lastmod: lastmods.get(u) || null }));
+      // عرض الروابط المكتشفة في textarea
+      txtLinks.value = urls.slice().sort().join('\n');
+
+      const records = urls.map(u => ({
+        url: u,
+        changefreq: 'daily',
+        lastmod: lastmods.get(u) || nowIso(),
+        priority: calcPriority(u)
+      }));
+
       const sitemapObj = buildSitemapsFromRecords(records);
       updatePreview(sitemapObj);
 
@@ -820,20 +787,6 @@
     resetCrawlProgress();
   });
 
-  btnBuildManual.addEventListener('click', buildFromManual);
-  txtLinks.addEventListener('keydown', (e)=>{
-    if(currentMode==='manual' && (e.metaKey||e.ctrlKey) && e.key==='Enter'){
-      e.preventDefault(); buildFromManual();
-    }
-  });
-  txtLinks.addEventListener('input', ()=>{
-    btnBuildManual.disabled = currentMode!=='manual' || txtLinks.value.trim().length===0;
-    if(isManualOnly){
-      btnCopyIndexLite.disabled = true;
-      btnZipLite.disabled = true;
-    }
-  });
-
   btnClear.addEventListener('click', () => {
     txtLinks.value = '';
     sumCount.textContent = '0';
@@ -843,17 +796,8 @@
     code.textContent = '';
     btnZip.disabled = true;
     btnCopyIndex.disabled = true;
-    if(isManualOnly){
-      btnZipLite.disabled = true;
-      btnCopyIndexLite.disabled = true;
-    }
-    if(currentMode==='manual'){
-      updateStatus('تم المسح. ألصق الروابط ثم اضغط "بناء من الروابط".');
-      btnBuildManual.disabled = true;
-    }else{
-      updateStatus('تم المسح.');
-      resetCrawlProgress();
-    }
+    updateStatus('تم المسح.');
+    resetCrawlProgress();
   });
 
   btnCopyIndex.addEventListener('click', async () => {
@@ -870,6 +814,7 @@
       }
     }
   });
+
   btnZip.addEventListener('click', () => {
     if(!lastBuild || !lastBuild.files.length) return;
     const files = lastBuild.files.map(f => ({ name: f.name, data: toBytes(f.xml) }));
@@ -882,9 +827,6 @@
     const blob = buildZipBlob(files);
     downloadBlob(blob, `sitemaps-${ts}.zip`);
   });
-
-  btnCopyIndexLite.addEventListener('click', () => btnCopyIndex.click());
-  btnZipLite.addEventListener('click', () => btnZip.click());
 
   function downloadBlob(blob, filename){
     const a = document.createElement('a');
@@ -954,58 +896,10 @@
     return new Blob([all], {type:'application/zip'});
   }
 
-  function applyModeUi(){
-    if(modeCrawl.checked){ currentMode = 'crawl'; }
-    if(modeManual.checked){ currentMode = 'manual'; }
-
-    const isManual = currentMode === 'manual';
-
-    startUrlEl.disabled = isManual;
-    btnCrawl.disabled = isManual;
-    btnCancel.disabled = true;
-    crawlBadge.style.display = 'none';
-
-    txtLinks.readOnly = !isManual;
-    txtLinks.placeholder = isManual
-      ? 'ألصق الروابط يدوياً هنا… ضع كل رابط في سطر مستقل.'
-      : 'هنا تُعرض الروابط بعد الزحف ...';
-
-    lblLinksHeader.textContent = isManual ? 'روابط الإدخال اليدوي' : 'المعاينة / الروابط المكتشفة';
-    modeHint.textContent = isManual
-      ? 'ألصق روابطك يدويًا ثم اضغط "بناء من الروابط" (Ctrl/⌘ + Enter).'
-      : 'سيتم عرض الروابط المكتشفة هنا بعد الزحف.';
-
-    btnBuildManual.disabled = !isManual || txtLinks.value.trim().length===0;
-
-    updateStatus(isManual ? 'وضع الإدخال اليدوي مُفعّل.' : '');
-    if(!isManual) resetCrawlProgress();
-  }
-
-  function applyManualOnlyUi(){
-    if(!isManualOnly) return;
-    modeManual.checked = true;
-    modeCrawl.checked = false;
-    currentMode = 'manual';
-    applyModeUi();
-
-    if(modeSeg) modeSeg.style.display = 'none';
-    crawlPanel.style.display = 'none';
-    if(previewPanel) previewPanel.style.display = 'none';
-
-    btnCopyIndexLite.style.display = 'inline-flex';
-    btnZipLite.style.display = 'inline-flex';
-    btnCopyIndexLite.disabled = true;
-    btnZipLite.disabled = true;
-
-    lblLinksHeader.textContent = 'روابط الإدخال اليدوي';
-    modeHint.textContent = 'الوضع المبسّط مُفعّل عبر الرابط: إدخال يدوي فقط بلا معاينة. الصق الروابط ثم اضغط "بناء من الروابط".';
-    updateStatus('وضع الإدخال اليدوي فقط (بدون معاينة) مُفعّل.');
-  }
-
-  modeCrawl.addEventListener('change', applyModeUi);
-  modeManual.addEventListener('change', applyModeUi);
-  applyModeUi();
-  applyManualOnlyUi();
+  // ✅ تثبيت واجهة "زحف تلقائي فقط"
+  txtLinks.readOnly = true;
+  txtLinks.placeholder = 'هنا تُعرض الروابط بعد الزحف ...';
+  resetCrawlProgress();
 </script>
 
 </body>
