@@ -1,159 +1,123 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover"/>
-  <title>أداة مجانية لإنشاء خريطة الموقع (Sitemap XML)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover">
+<title>أداة مجانية لإنشاء خريطة الموقع (Sitemap XML)</title>
 
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg:#f7f8fb; --bg-2:#f1f5fb; --card:#ffffff; --text:#0c1424; --muted:#5b6472;
-      --accent:#2563eb; --ok:#15803d; --warn:#d97706; --error:#dc2626;
-      --border:#e6e9f2; --shadow:0 6px 16px rgba(0,0,0,.08);
-      --radius:16px; --radius-sm:12px;
-      --sidebar-w:280px;
-      --fs-base:13px; --fs-sm:11.5px; --fs-xs:10.5px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:"Cairo",system-ui,Arial,Helvetica,sans-serif; line-height:1.65;
-      background:linear-gradient(180deg,var(--bg),var(--bg-2)); color:var(--text);
-      -webkit-font-smoothing:antialiased; overflow-x:hidden; font-size:var(--fs-base);
-    }
-    .wrap{max-width:1200px;margin:0 auto;padding:24px 16px 64px}
-    .topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px; flex-wrap:wrap}
-    .btn{
-      border:1px solid var(--border); background:linear-gradient(180deg,#fff,#f9fbff);
-      color:var(--text); padding:8px 12px; border-radius:14px; cursor:pointer;
-      font-weight:700; box-shadow:var(--shadow);
-      transition:transform .18s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
-      font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-      overflow-wrap:anywhere; word-break:break-word; min-width:0;
-    }
-    .btn:hover{transform:translateY(-2px); border-color:#cbd5e1}
-    .btn.primary{background:linear-gradient(135deg,#2563eb,#8b5cf6); color:#fff; border-color:transparent}
-    .btn.ok{background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; border-color:transparent}
-    .btn.home{background:#000; color:#fff; border-color:#000}
-    .btn:disabled{opacity:.6; cursor:not-allowed}
+<style>
+  :root{
+    --bg:#f7f8fb; --bg-2:#f1f5fb; --card:#ffffff; --text:#0c1424; --muted:#5b6472; --accent:#2563eb;
+    --ok:#15803d; --warn:#d97706; --error:#dc2626; --border:#e6e9f2; --shadow:0 6px 16px rgba(0,0,0,.08);
+    --radius:16px; --radius-sm:12px;
+    --sidebar-w:280px;
+    --fs-base:13px; --fs-sm:11.5px;
+  }
 
-    /* ✅ زر تواصل معي في التوب بار */
-    .btn.contactTop{
-      background: var(--accent);
-      border-color: var(--accent);
-      color:#fff;
-      justify-content:center;
-    }
-    .btn.contactTop:hover{
-      background: var(--accent);
-      border-color: var(--accent);
-      color:#fff;
-    }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:"Cairo",system-ui,Arial,Helvetica,sans-serif; line-height:1.65;
+    background:linear-gradient(180deg,var(--bg),var(--bg-2)); color:var(--text);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden; font-size:var(--fs-base);
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:24px 16px 64px}
 
-    .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); min-width:0}
-    .titleRow{display:flex;align-items:center;gap:10px;justify-content:space-between; min-width:0}
-    h1{margin:0;font-size:clamp(18px,2.2vw,24px);font-weight:800;letter-spacing:.2px}
-    .sub{margin-top:6px;color:var(--muted);font-size:var(--fs-sm)}
-    .layout{display:grid; grid-template-columns: var(--sidebar-w) 1fr; gap:14px; align-items:stretch;}
-    #sidePanel{display:flex; height:100%; min-height:0; overflow:hidden;}
-    @media (min-width:981px){ #sidePanel{ contain:size; }}
-    .sidebar-card{flex:1 1 auto; height:100%; display:flex; flex-direction:column; gap:10px; min-height:0; overflow:auto;}
-    .avatar{width:112px;height:112px;border-radius:50%;background:#fff;padding:6px;object-fit:contain;object-position:center;border:1px solid var(--border);align-self:center}
-    .logo{width:100%; max-width:180px; align-self:center; object-fit:contain; object-position:center; background:#fff; border-radius:12px; border:1px solid var(--border); padding:8px}
-    .title-logo{width:180px; max-width:180px; align-self:center}
+  .topbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .btn{
+    border:1px solid var(--border); background:linear-gradient(180deg,#fff,#f9fbff);
+    color:var(--text); padding:8px 12px; border-radius:14px; cursor:pointer; font-weight:700; box-shadow:var(--shadow);
+    transition:transform .18s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+    font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn:hover{transform:translateY(-2px); border-color:#cbd5e1}
+  .btn.home{background:#000; color:#fff; border-color:#000}
+  
+  .btn.contactTop{
+    background: var(--accent);
+    border-color: var(--accent);
+    color:#fff;
+    justify-content:center;
+  }
+  .btn.contactTop:hover{ background: var(--accent); border-color: var(--accent); color:#fff; }
 
-    .s-list{display:grid; gap:8px}
-    .s-item a{
-      display:block; padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff;
-      color:#0f172a; text-decoration:none; font-weight:600; transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease;
-      box-shadow:0 4px 12px rgba(15,23,42,.05); font-size:13px;
-      overflow-wrap:anywhere; word-break:break-word;
-    }
-    .s-item a:hover{transform:translateY(-2px); border-color:#cbd5e1; box-shadow:0 8px 18px rgba(15,23,42,.08)}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow)}
+  .titleRow{display:flex;align-items:center;gap:10px;justify-content:space-between}
+  h1{margin:0;font-size:clamp(18px,2.2vw,24px);font-weight:800;letter-spacing:.2px}
+  .sub{margin-top:6px;color:var(--muted);font-size:var(--fs-sm)}
+  .logo{width:100%; max-width:180px; align-self:center; object-fit:contain; object-position:center; background:#fff; border-radius:12px; border:1px solid var(--border); padding:8px}
+  .title-logo{width:180px; max-width:180px; align-self:center}
 
-    /* ✅ نص بدون رابط بنفس ستايل الروابط */
-    .s-text{
-      display:block; padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff;
-      color:#0f172a; font-weight:600; box-shadow:0 4px 12px rgba(15,23,42,.05); font-size:13px;
-      overflow-wrap:anywhere; word-break:break-word;
-    }
+  /* التخطيط العام */
+  .layout{
+    display:grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    gap:14px;
+    align-items:stretch; /* يضمن تساوي الارتفاع */
+    margin-top:12px;
+  }
 
-    #toolBox{display:flex; flex-direction:column; gap:10px; min-height:0}
-    .panel.card label{display:block; font-size:14px; margin-bottom:6px}
-    textarea{
-      width:100%; background:#fff; color:#text; border:1px solid var(--border);
-      border-radius:12px; padding:10px 12px; outline:none;
-      min-height:140px; resize:vertical; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; line-height:1.55;
-      overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
-    }
-    input[type="file"], input[type="url"], input[type="number"], select{
-      width:100%; background:#fff; color:#var(--text); border:1px solid var(--border);
-      border-radius:12px; padding:10px 12px; outline:none; font-size:13px;
-    }
-    textarea:focus,input[type="file"]:focus,input[type="url"]:focus,input[type="number"]:focus,select:focus{box-shadow:0 0 0 3px rgba(37,99,235,.25)}
-    .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-    .grid{display:grid; gap:10px}
-    .grid > *, .row > * { min-width:0; }
-    .summary{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
-    .card-mini{background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px}
-    .card-mini .k{font-size:12px; color:#muted}
-    .card-mini .v{font-weight:800; font-size:18px}
-    .code{
-      background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px; overflow:auto;
-      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      white-space:pre-wrap; line-height:1.5; max-height:600px;
-      overflow-wrap:anywhere; word-break:break-word; direction:ltr; text-align:left; min-width:0;
-    }
-    .hl .tag{color:#0ea5e9}
-    .hl .attr{color:#ef4444}
-    .hl .val{color:#059669}
-    .hl .cm{color:#94a3b8}
-    .links-list a{display:inline-block; margin:.2rem .4rem; font-size:13px; overflow-wrap:anywhere; word-break:break-word}
-    .errors{background:#fff1f2; border:1px solid #fecdd3; color:#b91c1c; border-radius:12px; padding:10px; margin-top:8px; display:none; overflow-wrap:anywhere; word-break:break-word}
-    @media (max-width:980px){
-      .layout{grid-template-columns:1fr}
-      #sidePanel{height:auto; overflow:visible;}
-      .avatar{width:104px;height:104px}
-    }
-    .status{font-size:12px; color:#5b6472; margin-top:6px; overflow-wrap:anywhere; word-break:break-word}
-    .badge{display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-weight:700; font-size:11px}
+  /* السايدبار */
+  #sidePanel{
+    display:block; 
+    height:auto; 
+    min-height:0; 
+    overflow:visible;
+  }
+  
+  .sidebar-card{
+    height:100%; 
+    display:flex; flex-direction:column; gap:10px; 
+    overflow:visible;
+  }
 
-    /* شريط التقدّم */
-    .crawl-progress{margin-top:10px; display:flex; flex-direction:column; gap:6px;}
-    .progressbar{height:12px; background:#eef2ff; border:1px solid var(--border); border-radius:999px; overflow:hidden;}
-    .progressbar > span{
-      display:block; height:100%; width:0%;
-      background:linear-gradient(90deg,#22d3ee,#60a5fa,#2563eb);
-      transition: width .35s cubic-bezier(.22,.8,.2,1);
-    }
-    .progress-meta{display:flex; justify-content:space-between; font-size:12px; color:#5b6472;}
-  </style>
+  .avatar{width:112px;height:112px;border-radius:50%;background:#fff;padding:6px;object-fit:contain;object-position:center;border:1px solid var(--border);align-self:center}
+  .s-list{display:grid; gap:8px}
+  .s-item a, .s-text{
+    display:block; padding:8px 10px; border:1px solid var(--border); border-radius:12px; background:#fff;
+    color:#0f172a; text-decoration:none; font-weight:600; transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+    box-shadow:0 4px 12px rgba(15,23,42,.05); font-size:13px;
+  }
+  .s-item a:hover{transform:translateY(-2px); border-color:#cbd5e1; box-shadow:0 8px 18px rgba(15,23,42,.08)}
+
+  /* يمين: منطقة الرسالة */
+  #toolBox{display:block; height: 100%; min-height:0}
+
+  /* زر الانتقال الكبير */
+  a.btn.primary {background:var(--accent);border-color:var(--accent);color:#fff}
+
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr}
+    .avatar{width:104px;height:104px}
+  }
+</style>
 </head>
-<body>
-  <div class="wrap">
-    <nav class="topbar">
-      <button class="btn" type="button" onclick="history.back()">رجوع</button>
-      <a class="btn home" href="https://anasrashed.com" rel="noopener">الرئيسية</a>
 
-      <!-- ✅ تواصل معي في التوب بار بدل ما يكون بالسايدبار -->
-      <a class="btn contactTop" href="https://contact.anasrashed.com" target="_blank" rel="noopener">تواصل معي</a>
-    </nav>
+<body>
+  <div class="wrap" id="app">
+    <div class="topbar">
+      <button class="btn" id="backBtn" onclick="history.back()">رجوع</button>
+      <a class="btn home" id="homeBtn" href="https://anasrashed.com" rel="noopener">الرئيسية</a>
+      <a class="btn contactTop" id="contactTopBtn" href="https://contact.anasrashed.com" target="_blank" rel="noopener">تواصل معي</a>
+    </div>
 
     <div class="card">
       <div class="titleRow">
         <div>
           <h1>أداة مجانية لإنشاء خريطة الموقع (Sitemap XML)</h1>
-          <div class="sub">اطلب خدمة <a href="https://contact.anasrashed.com/">تفعيل خريطة الموقع</a> وسيتم بناء وتفعيل الخريطة خلال 24 ساعة</div>
+          <div class="sub">اطلب خدمة <a href="https://contact.anasrashed.com/" style="color:var(--accent);text-decoration:none;">تفعيل خريطة الموقع</a> وسيتم بناء وتفعيل الخريطة خلال 24 ساعة</div>
         </div>
         <img class="logo title-logo" src="https://i.imgur.com/meUEoP7.png" alt="الشعار"
              onerror="this.onerror=null; this.src='https://i.imgur.com/meUEoP7.jpg';">
       </div>
     </div>
 
-    <div class="layout" style="margin-top:12px">
+    <div class="layout">
+
+      <!-- السايدبار (يمين) -->
       <aside id="sidePanel">
         <div class="card sidebar-card">
           <img class="avatar" src="https://i.imgur.com/B3UkEQ0.jpg" alt="صورتي" referrerpolicy="no-referrer"
@@ -161,753 +125,47 @@
 
           <div class="s-list">
             <div class="s-item"><a href="https://whoami.anasrashed.com" target="_blank" rel="noopener">من أنا؟</a></div>
+            <div class="s-item"><a href="https://anasrashed.gumroad.com/l/seo-book-for-ecommerce" target="_blank" rel="noopener">كتاب دليل السيو الشامل</a></div>
+            <div class="s-item"><a href="https://blog.anasrashed.com" target="_blank" rel="noopener">المدونة</a></div>
 
-            <div class="s-item">
-              <a href="https://anasrashed.gumroad.com/l/seo-book-for-ecommerce" target="_blank" rel="noopener">
-                كتاب دليل السيو الشامل
-              </a>
-            </div>
-
-            <div class="s-item">
-              <a href="https://blog.anasrashed.com/" target="_blank" rel="noopener">
-                المدونة
-              </a>
-            </div>
-
-            <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;">
-              <b>خدماتي</b>
-            </div>
-
+            <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;"><b>خدماتي</b></div>
             <div class="s-item"><span class="s-text">تحسين داخلي</span></div>
             <div class="s-item"><span class="s-text">تحسين خارجي</span></div>
             <div class="s-item"><span class="s-text">استخراج الكلمات المفتاحية للمنافسين</span></div>
             <div class="s-item"><span class="s-text">تفعيل خريطة الموقع للباقة بلس</span></div>
 
-            <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;">
-              <b>أدوات سيو احترافية</b>
-            </div>
-
+            <div class="sub" style="text-align:center; font-size:18px; margin-top:10px;"><b>أدوات سيو احترافية</b></div>
             <div class="s-item"><a href="https://serp.anasrashed.com" target="_blank" rel="noopener">أداة SERP بالذكاء الإصطناعي</a></div>
             <div class="s-item"><a href="https://writer.anasrashed.com" target="_blank" rel="noopener">أداة كتابة مقالات بالذكاء الإصطناعي</a></div>
             <div class="s-item"><a href="https://smg.anasrashed.com" target="_blank" rel="noopener">أداة منشئ خريطة الموقع</a></div>
             <div class="s-item"><a href="https://keywords.anasrashed.com" target="_blank" rel="noopener">أداة الكلمات المفتاحية</a></div>
             <div class="s-item"><a href="https://checker.anasrashed.com" target="_blank" rel="noopener">أداة فحص الموقع</a></div>
+
+            <!-- ✅ إضافة الأداة للقائمة -->
+            <div class="s-item"><a href="https://tinyimage.anasrashed.com" target="_blank" rel="noopener">تحويل الصور الى WebP</a></div>
           </div>
         </div>
       </aside>
 
+      <!-- رسالة الانتقال -->
       <section id="toolBox">
-        <!-- لوحة الزحف -->
-        <section class="panel card" id="crawlPanel">
-          <div class="grid" style="grid-template-columns:1fr; align-items:end">
-            <div>
-              <label for="startUrl">رابط الموقع</label>
-              <input id="startUrl" type="url" placeholder="مثال: https://example.com" inputmode="url">
-            </div>
-            <div class="row" style="justify-content:flex-start">
-              <button id="btnCrawl" class="btn primary" type="button">ابدأ الزحف</button>
-              <button id="btnCancel" class="btn" type="button" disabled>إلغاء</button>
-              <span id="crawlBadge" class="badge" style="display:none">جارٍ الزحف…</span>
-            </div>
+        <div class="card" style="text-align:center; padding:60px 20px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:24px; min-height:400px; height:100%;">
+            
+            <div style="font-size:48px;">🚀</div>
 
-            <!-- شريط التقدم -->
-            <div class="crawl-progress" aria-live="polite">
-              <div class="progressbar" aria-label="تقدم الزحف">
-                <span id="crawlPbar"></span>
-              </div>
-              <div class="progress-meta">
-                <span id="crawlPcent">0%</span>
-                <span id="crawlPhelp">جاهز للبدء</span>
-              </div>
-            </div>
-          </div>
-          <div id="crawlStatus" class="status"></div>
-        </section>
+            <h2 style="margin:0; font-size:clamp(20px, 4vw, 28px); color:var(--text); line-height:1.4;">
+                تم الإنتقال الى منصة أدوات أنس راشد
+            </h2>
+            
+            <a href="https://tools.anasrashed.com" class="btn primary" style="font-size:16px; padding:12px 24px; text-decoration:none; display:inline-block;">
+                انتقل الى المنصة
+            </a>
 
-        <!-- لوحة الروابط (عرض الروابط المكتشفة فقط) -->
-        <section class="panel card">
-          <div class="row" style="justify-content:space-between; align-items:flex-end">
-            <div>
-              <label id="lblLinksHeader" for="txtLinks" style="margin:0">المعاينة / الروابط المكتشفة</label>
-              <div class="hint" id="modeHint">سيتم عرض الروابط المكتشفة هنا بعد الزحف.</div>
-            </div>
-            <div class="row">
-              <button id="btnClear" class="btn" type="button">مسح</button>
-            </div>
-          </div>
-
-          <textarea id="txtLinks" dir="ltr" readonly placeholder="هنا تُعرض الروابط بعد الزحف ..."></textarea>
-        </section>
-
-        <!-- لوحة المعاينة والتحميل -->
-        <section class="panel card" id="previewPanel">
-          <div class="row" style="justify-content:space-between">
-            <h3 style="margin:6px 0 10px">المعاينة</h3>
-            <div class="row">
-              <button id="btnCopyIndex" class="btn primary" type="button" disabled>نسخ sitemap_index.xml</button>
-              <button id="btnZip" class="btn ok" type="button" disabled>تنزيل sitemap كـ ZIP</button>
-            </div>
-          </div>
-
-          <div class="summary">
-            <div class="card-mini"><div class="k">الروابط بعد التنظيف</div><div id="sumCount" class="v">0</div></div>
-            <div class="card-mini"><div class="k">عدد ملفات الخرائط</div><div id="sumFiles" class="v">0</div></div>
-            <div class="card-mini"><div class="k">الحجم التقريبي</div><div id="sumSize" class="v">0 KB</div></div>
-          </div>
-
-          <div class="grid" style="margin-top:10px">
-            <div>
-              <label>مقتطف XML (كامل)</label>
-              <div id="code" class="code hl" aria-live="polite" dir="ltr"></div>
-            </div>
-            <div>
-              <div id="links" class="links-list">لا يوجد ملفات بعد.</div>
-              <div id="errors" class="errors" role="alert"></div>
-            </div>
-          </div>
-        </section>
+        </div>
       </section>
+
     </div>
   </div>
-
-<script>
-  const $ = s => document.querySelector(s);
-  const toBytes = s => new TextEncoder().encode(s);
-  const escapeXml = s => String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
-
-  const txtLinks = $('#txtLinks');
-  const btnClear = $('#btnClear');
-  const btnZip = $('#btnZip');
-  const btnCopyIndex = $('#btnCopyIndex');
-  const sumCount = $('#sumCount');
-  const sumFiles = $('#sumFiles');
-  const sumSize = $('#sumSize');
-  const code = $('#code');
-  const links = $('#links');
-  const errorsBox = $('#errors');
-
-  const startUrlEl = $('#startUrl');
-  const btnCrawl = $('#btnCrawl');
-  const btnCancel = $('#btnCancel');
-  const crawlStatus = $('#crawlStatus');
-  const crawlBadge = $('#crawlBadge');
-  const crawlPanel = $('#crawlPanel');
-
-  const crawlPbar = $('#crawlPbar');
-  const crawlPcent = $('#crawlPcent');
-  const crawlPhelp = $('#crawlPhelp');
-
-  let cancelFlag = false;
-  let lastBuild = null;
-  let aborter = null;
-
-  const PROG_SOFT_CAP = 96;
-  let progVal = 0, progTimer = null;
-
-  /* ✅ الرسالة التي تُضاف أعلى ملفات XML */
-  const SITEMAP_BUILDER_COMMENT = '<!-- https://smg.anasrashed.com تم إنشاء خريطة الموقع بواسطة أداة منشئ خريطة الموقع المجانية الخاصة بـ أنس راشد   -->';
-
-  function renderCrawlProgress(p){
-    const v = Math.max(0, Math.min(100, Math.round(p)));
-    if(crawlPbar) crawlPbar.style.width = v + '%';
-    if(crawlPcent) crawlPcent.textContent = v + '%';
-  }
-  function resetCrawlProgress(){
-    clearInterval(progTimer); progTimer = null;
-    progVal = 0; renderCrawlProgress(0);
-    if(crawlPhelp) crawlPhelp.textContent = 'جاهز للبدء';
-  }
-  function startCrawlProgress(){
-    clearInterval(progTimer);
-    progVal = 0; renderCrawlProgress(0);
-    if(crawlPhelp) crawlPhelp.textContent = 'جاري الزحف…';
-    progTimer = setInterval(()=>{
-      progVal = Math.min(PROG_SOFT_CAP, progVal + Math.max(0.35, (PROG_SOFT_CAP - progVal)*0.055));
-      renderCrawlProgress(progVal);
-    }, 200);
-  }
-  function bumpCrawlProgressLive(processed, queued, active, limit){
-    const denom = Math.max(1, processed + queued + active);
-    const liveRatio = processed / denom;
-    const clampTarget = Math.min(PROG_SOFT_CAP/100, liveRatio, limit ? processed/limit : liveRatio);
-    const exact = Math.max(0, Math.min(100, Math.round(clampTarget*100)));
-    if (exact > progVal) {
-      progVal = progVal*0.5 + exact*0.5;
-      renderCrawlProgress(progVal);
-    }
-  }
-  function finishCrawlProgress(){
-    clearInterval(progTimer); progTimer = null;
-    const start = progVal, end = 100, dur = 600;
-    const t0 = performance.now();
-    (function anim(now){
-      const k = Math.min(1, (now - t0)/dur);
-      const eased = start + (end - start) * (0.5 - Math.cos(Math.PI*k)/2);
-      renderCrawlProgress(eased);
-      if(k < 1) requestAnimationFrame(anim);
-    })(performance.now());
-    if(crawlPhelp) crawlPhelp.textContent = 'اكتمل الزحف';
-  }
-
-  function resolveUrl(u){
-    u=(u||'').trim();
-    const m = u.match(/\s#.*$/);
-    if(m) u = u.slice(0, m.index).trim();
-    if(/^https?:\/\//i.test(u)) return u;
-    return null;
-  }
-  function normalize(u){
-    try{
-      const url = new URL(u);
-      url.hash = '';
-      const delKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid','mc_cid','mc_eid','ref'];
-      delKeys.forEach(k=> url.searchParams.delete(k));
-      let s = url.toString();
-      if(url.pathname !== '/' && s.endsWith('/')) s = s.slice(0,-1);
-      return s;
-    }catch{ return null; }
-  }
-  function sameHost(u, origin){
-    try{
-      const h1 = new URL(u).host.replace(/^www\./,'');
-      const h2 = new URL(origin).host.replace(/^www\./,'');
-      return h1 === h2;
-    }catch{ return false; }
-  }
-  function extBlocked(u){
-    return /\.(?:jpe?g|png|gif|webp|svg|bmp|ico|mp4|avi|mov|wmv|mkv|mp3|wav|pdf|zip|rar|7z|gz|css|js|woff2?|ttf|eot)(\?|#|$)/i.test(u);
-  }
-
-  const PROXY_PREFIX = 'https://sitemap-generator.anasshopify88.workers.dev';
-  const proxify = u => PROXY_PREFIX + '?url=' + encodeURIComponent(u);
-
-  async function fetchText(u, signal){
-    try{
-      const r = await fetch(proxify(u), {credentials:'omit', cache:'no-cache', redirect:'follow', signal});
-      if(r.ok) return await r.text();
-    }catch{}
-    try{
-      const r = await fetch(u, {credentials:'omit', cache:'no-cache', redirect:'follow', signal});
-      if(r.ok) return await r.text();
-    }catch{}
-    throw new Error('تعذّر قراءة: '+u);
-  }
-  async function headResp(u, signal){
-    try{
-      const r = await fetch(proxify(u), {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow', signal});
-      if (r.ok) return r;
-    }catch{}
-    try{
-      const r = await fetch(u, {method:'HEAD', credentials:'omit', cache:'no-cache', redirect:'follow', signal});
-      if (r.ok) return r;
-    }catch{}
-    return null;
-  }
-  async function headOk(u, signal){
-    const r = await headResp(u, signal);
-    return !!r;
-  }
-
-  const sleep = ms => new Promise(r=> setTimeout(r, ms));
-
-  function toISODate(s){
-    if(!s) return null;
-    const d = new Date(s);
-    if (isNaN(d.getTime())) return null;
-    return d.toISOString();
-  }
-  function nowIso(){
-    return new Date().toISOString();
-  }
-
-  /* ✅ priority:
-     - الرئيسية: 1.00
-     - التصنيفات: 0.80
-     - الصفحات تحت التصنيفات: 0.64
-     (عدّل كلمات التصنيفات حسب منصتك إذا احتجت)
-  */
-  function calcPriority(urlStr){
-    try{
-      const u = new URL(urlStr);
-      const p = (u.pathname || '/').toLowerCase();
-
-      if (p === '/' || p === '') return '1.00';
-
-      const isCategory =
-        /^\/(collections|collection|categories|category|c)\//.test(p) ||
-        p === '/collections' || p === '/categories';
-
-      if (isCategory) return '0.80';
-
-      return '0.64';
-    }catch{
-      return '0.64';
-    }
-  }
-
-  async function readRobots(origin, signal){
-    const url = new URL('/robots.txt', origin).toString();
-    try{
-      const txt = await fetchText(url, signal);
-      const lines = txt.split(/\r?\n/).map(l=>l.trim());
-      const rules = {disallow:[], allow:[]};
-      let active = false;
-      for(const ln of lines){
-        if(/^user-agent:\s*\*/i.test(ln)){ active = true; continue; }
-        if(/^user-agent:/i.test(ln) && !/^user-agent:\s*\*/i.test(ln)){ active = false; continue; }
-        if(!active) continue;
-        const mD = ln.match(/^disallow:\s*(.*)$/i);
-        const mA = ln.match(/^allow:\s*(.*)$/i);
-        if(mD){ rules.disallow.push((mD[1]||'').trim()); }
-        if(mA){ rules.allow.push((mA[1]||'').trim()); }
-      }
-      return path => {
-        const allowHit = rules.allow.some(p=> p && path.startsWith(p));
-        const disHit = rules.disallow.some(p=> p && path.startsWith(p));
-        if(allowHit) return true;
-        if(disHit) return false;
-        return true;
-      };
-    }catch{
-      return () => true;
-    }
-  }
-
-  async function readSitemapsSeeds(origin, signal){
-    const seedsSet = new Set();
-    const lastmods = new Map();
-    const tryUrls = [
-      new URL('/sitemap.xml', origin).toString(),
-      new URL('/sitemap_index.xml', origin).toString()
-    ];
-    for (const su of tryUrls){
-      try{
-        const ok = await headOk(su, signal);
-        if (!ok) continue;
-        const xml = await fetchText(su, signal);
-
-        const smaps = Array.from(xml.matchAll(/<sitemap>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/sitemap>/gi));
-        if (smaps.length){
-          for(const m of smaps){
-            const u = m[1];
-            if (u){ seedsSet.add(u); }
-          }
-          for (const m of smaps){
-            const loc = m[1];
-            try{
-              const xml2 = await fetchText(loc, signal);
-              const urls = Array.from(xml2.matchAll(/<url>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/url>/gi));
-              for (const u of urls){
-                const url = u[1]; const lm = toISODate(u[2]);
-                const n = normalize(url);
-                if(n){ seedsSet.add(n); if(lm) lastmods.set(n, lm); }
-              }
-            }catch{}
-          }
-          continue;
-        }
-
-        const urls = Array.from(xml.matchAll(/<url>[\s\S]*?<loc>\s*([^<\s]+)\s*<\/loc>[\s\S]*?(?:<lastmod>\s*([^<]+)\s*<\/lastmod>)?[\s\S]*?<\/url>/gi));
-        if (urls.length){
-          for (const m of urls){
-            const u = normalize(m[1]); const lm = toISODate(m[2]);
-            if(u){ seedsSet.add(u); if(lm) lastmods.set(u, lm); }
-          }
-        } else {
-          const locs = Array.from(xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)).map(m=>m[1]);
-          for (const u of locs){
-            const n = normalize(u);
-            if(n) seedsSet.add(n);
-          }
-        }
-      }catch{}
-    }
-    return { seeds: Array.from(seedsSet).filter(Boolean), lastmods };
-  }
-
-  async function enrichLastMods(urls, knownMap, signal){
-    const out = new Map(knownMap);
-    const CONC = 6;
-    let i = 0;
-    async function worker(){
-      while(i < urls.length && !cancelFlag){
-        const idx = i++; const u = urls[idx];
-        if (out.has(u)) continue;
-        try{
-          const r = await headResp(u, signal);
-          const lm = r?.headers?.get('Last-Modified');
-          const iso = toISODate(lm);
-          if(iso) out.set(u, iso);
-        }catch{}
-      }
-    }
-    await Promise.all(Array.from({length:CONC}, worker));
-    return out;
-  }
-
-  async function crawlDomain(start, limit=2000){
-    const origin = new URL(start).origin;
-    aborter = new AbortController();
-    const { signal } = aborter;
-
-    const allowPath = await readRobots(origin, signal);
-
-    const q = [];
-    const seen = new Set();
-    const out = new Set();
-
-    let urlLastmods = new Map();
-
-    try{
-      const { seeds, lastmods } = await readSitemapsSeeds(origin, signal);
-      urlLastmods = lastmods;
-      for(const s of seeds){
-        if (s && sameHost(s, origin) && !extBlocked(s)) q.push(s);
-      }
-    }catch{}
-
-    const normalizedStart = normalize(start);
-    if(normalizedStart && !q.includes(normalizedStart)) q.unshift(normalizedStart);
-
-    const EXCLUDE_PATTERNS = [
-      /\/(cart|checkout|login|account|orders|admin|wp-admin|cdn-cgi)(\/|$)/i,
-      /(^|\/)(tag|tags)(\/|$)/i
-    ];
-
-    const CONCURRENCY = 4;
-    let active = 0, processed = 0;
-
-    updateStatus('بدء الزحف…');
-
-    async function worker(){
-      while(q.length && !cancelFlag && out.size < limit){
-        const url = q.shift();
-        if(!url || seen.has(url)) continue;
-        seen.add(url);
-
-        try{
-          const uo = new URL(url);
-          if(!allowPath(uo.pathname)) { processed++; continue; }
-          if(EXCLUDE_PATTERNS.some(rx=> rx.test(uo.pathname))) { processed++; continue; }
-
-          active++;
-          const html = await fetchText(url, signal);
-
-          let canonical = null;
-          try{
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-
-            const metaRobots = doc.querySelector('meta[name="robots"]');
-            if(!(metaRobots && /noindex/i.test(metaRobots.getAttribute('content')||''))){
-              const linkCanonical = doc.querySelector('link[rel="canonical"]');
-              if(linkCanonical && linkCanonical.href){
-                canonical = normalize(linkCanonical.href);
-              }
-              const anchors = Array.from(doc.querySelectorAll('a[href]')).map(a=> a.getAttribute('href'));
-              for(const h of anchors){
-                if(!h) continue;
-                let abs;
-                try{ abs = new URL(h, url).toString(); } catch{ continue; }
-                if(!sameHost(abs, origin)) continue;
-                if(extBlocked(abs)) continue;
-                const n = normalize(abs);
-                if(!n || seen.has(n) || out.size + q.length >= limit) continue;
-                try{
-                  const pn = new URL(n).pathname;
-                  if(EXCLUDE_PATTERNS.some(rx=> rx.test(pn))) continue;
-                }catch{}
-                q.push(n);
-              }
-            }
-          }catch{}
-
-          const finalUrl = (canonical && sameHost(canonical, origin)) ? canonical : url;
-
-          if(!extBlocked(finalUrl)){
-            try{
-              const pf = new URL(finalUrl).pathname;
-              if(!EXCLUDE_PATTERNS.some(rx=> rx.test(pf))){
-                out.add(finalUrl);
-              }
-            }catch{
-              out.add(finalUrl);
-            }
-          }
-
-          processed++;
-          updateStatus(`مكتشفة: ${out.size} | بالانتظار: ${q.length} | قيد المعالجة: ${active}`);
-          bumpCrawlProgressLive(out.size, q.length, active, limit);
-
-          await sleep(120);
-        }catch{} finally { active--; }
-      }
-    }
-
-    const workers = Array.from({length:CONCURRENCY}, ()=> worker());
-    await Promise.race([
-      Promise.all(workers),
-      new Promise(res => {
-        const t = setInterval(()=>{
-          if((!q.length && active===0) || cancelFlag || out.size >= limit){
-            clearInterval(t);
-            res();
-          }
-        }, 200);
-      })
-    ]);
-
-    if(cancelFlag){ cancelFlag = false; try{ aborter?.abort(); }catch{} }
-    aborter = null;
-
-    const urlsArr = Array.from(out);
-    try{
-      const enriched = await enrichLastMods(urlsArr, urlLastmods, undefined);
-      urlLastmods = enriched;
-    }catch{}
-
-    return { urls: urlsArr, lastmods: urlLastmods };
-  }
-
-  function buildSitemapsFromRecords(records){
-    const CHUNK = 50000;
-    const chunks = [];
-    for(let i=0;i<records.length;i+=CHUNK){
-      chunks.push(records.slice(i,i+CHUNK));
-    }
-
-    const nsBase = 'http://www.sitemaps.org/schemas/sitemap/0.9';
-
-    const urlsetOpen = () => `<?xml version="1.0" encoding="UTF-8"?>\n${SITEMAP_BUILDER_COMMENT}\n<urlset xmlns="${nsBase}">\n`;
-
-    const urlEntry = it => {
-      let xml = `  <url>\n    <loc>${escapeXml(it.url)}</loc>\n`;
-      xml += `    <lastmod>${escapeXml(it.lastmod || nowIso())}</lastmod>\n`;
-      if(it.changefreq){ xml += `    <changefreq>${escapeXml(it.changefreq)}</changefreq>\n`; }
-      xml += `    <priority>${escapeXml(it.priority || calcPriority(it.url))}</priority>\n`;
-      xml += `  </url>\n`;
-      return xml;
-    };
-
-    const files = [];
-    for(let i=0; i<chunks.length; i++){
-      let xml = urlsetOpen();
-      for(const it of chunks[i]) xml += urlEntry(it);
-      xml += `</urlset>\n`;
-      const name = (chunks.length === 1) ? 'sitemap.xml' : `sitemap-${i+1}.xml`;
-      files.push({ name, xml });
-    }
-
-    let indexXml = '';
-    if(files.length > 1){
-      indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n${SITEMAP_BUILDER_COMMENT}\n<sitemapindex xmlns="${nsBase}">\n`;
-      const last = nowIso();
-      for(const f of files){
-        indexXml += `  <sitemap>\n    <loc>${escapeXml(f.name)}</loc>\n    <lastmod>${last}</lastmod>\n  </sitemap>\n`;
-      }
-      indexXml += `</sitemapindex>\n`;
-      files.push({ name: 'sitemap_index.xml', xml: indexXml });
-    }
-
-    const approxSize = files.reduce((s,f)=> s + new TextEncoder().encode(f.xml).length, 0);
-    return { files, indexXml, count: records.length, approxSize, errors: [] };
-  }
-
-  function updatePreview(filesObj){
-    const { files, indexXml, count, approxSize } = filesObj;
-    lastBuild = { files, indexXml };
-
-    links.innerHTML = '';
-    errorsBox.style.display = 'none';
-    sumCount.textContent = String(count);
-    sumFiles.textContent = String(files.length);
-    sumSize.textContent = (approxSize / 1024).toFixed(1) + ' KB';
-
-    if(files.length){
-      const allXml = files.map(f => `<!-- ${f.name} -->\n${f.xml}`).join('\n\n');
-      code.textContent = allXml;
-
-      for(const f of files){
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([f.xml], {type:'application/xml'}));
-        a.download = f.name;
-        a.textContent = `تنزيل ${f.name}`;
-        a.className = 'btn';
-        a.style.margin='6px 6px 0 0';
-        links.appendChild(a);
-      }
-    } else {
-      code.textContent = '';
-      links.textContent = 'لا يوجد ملفات بعد.';
-    }
-    btnZip.disabled = files.length === 0;
-    btnCopyIndex.disabled = files.length === 0;
-  }
-
-  btnCrawl.addEventListener('click', async () => {
-    const start = resolveUrl(startUrlEl.value);
-    if(!start){
-      updateStatus('فضلاً أدخل رابط الموقع صحيح يبدأ بـ https:// أو http://');
-      return;
-    }
-    btnCrawl.disabled = true;
-    btnCancel.disabled = false;
-    crawlBadge.style.display = 'inline-block';
-    updateStatus('جاري الزحف…');
-    startCrawlProgress();
-
-    try {
-      const limit = 2000;
-      const { urls, lastmods } = await crawlDomain(start, limit);
-
-      // عرض الروابط المكتشفة في textarea
-      txtLinks.value = urls.slice().sort().join('\n');
-
-      const records = urls.map(u => ({
-        url: u,
-        changefreq: 'daily',
-        lastmod: lastmods.get(u) || nowIso(),
-        priority: calcPriority(u)
-      }));
-
-      const sitemapObj = buildSitemapsFromRecords(records);
-      updatePreview(sitemapObj);
-
-      finishCrawlProgress();
-      updateStatus(`تم! مجموع الروابط بعد التنظيف: ${sitemapObj.count}.`);
-    } catch(e){
-      updateStatus('فشل أثناء الزحف: ' + (e.message || e));
-      resetCrawlProgress();
-    } finally {
-      btnCrawl.disabled = false;
-      btnCancel.disabled = true;
-      crawlBadge.style.display = 'none';
-    }
-  });
-
-  btnCancel.addEventListener('click', () => {
-    cancelFlag = true;
-    try{ aborter?.abort(); }catch{}
-    updateStatus('تم الإلغاء.');
-    resetCrawlProgress();
-  });
-
-  btnClear.addEventListener('click', () => {
-    txtLinks.value = '';
-    sumCount.textContent = '0';
-    sumFiles.textContent = '0';
-    sumSize.textContent = '0 KB';
-    links.innerHTML = '';
-    code.textContent = '';
-    btnZip.disabled = true;
-    btnCopyIndex.disabled = true;
-    updateStatus('تم المسح.');
-    resetCrawlProgress();
-  });
-
-  btnCopyIndex.addEventListener('click', async () => {
-    if(!lastBuild) return;
-    try {
-      await navigator.clipboard.writeText(lastBuild.indexXml || '');
-      btnCopyIndex.textContent = 'تم النسخ ✓';
-      setTimeout(() => btnCopyIndex.textContent = 'نسخ sitemap_index.xml', 1200);
-    } catch {
-      const w = window.open();
-      if(w){
-        w.document.write('<pre>' + escapeXml(lastBuild.indexXml || '') + '</pre>');
-        w.document.close();
-      }
-    }
-  });
-
-  btnZip.addEventListener('click', () => {
-    if(!lastBuild || !lastBuild.files.length) return;
-    const files = lastBuild.files.map(f => ({ name: f.name, data: toBytes(f.xml) }));
-    const now = new Date();
-    const ts = now.getFullYear().toString()
-               + String(now.getMonth()+1).padStart(2, '0')
-               + String(now.getDate()).padStart(2, '0') + '-'
-               + String(now.getHours()).padStart(2, '0')
-               + String(now.getMinutes()).padStart(2, '0');
-    const blob = buildZipBlob(files);
-    downloadBlob(blob, `sitemaps-${ts}.zip`);
-  });
-
-  function downloadBlob(blob, filename){
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    URL.revokeObjectURL(a.href);
-    a.remove();
-  }
-
-  function updateStatus(msg){ crawlStatus.textContent = msg || ''; }
-
-  function buildZipBlob(files){
-    const encoder = new TextEncoder();
-    const writeU32 = (buf, off, v) => { buf[off]=v&255; buf[off+1]=(v>>>8)&255; buf[off+2]=(v>>>16)&255; buf[off+3]=(v>>>24)&255; };
-    const writeU16 = (buf, off, v) => { buf[off]=v&255; buf[off+1]=(v>>>8)&255; };
-
-    const crcTable = (()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++){ c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1); } t[n]=c>>>0;} return t; })();
-    const crc32 = (u8)=>{ let c=0xFFFFFFFF; for(let i=0;i<u8.length;i++){ c=crcTable[(c^u8[i])&0xFF]^(c>>>8);} return (c^0xFFFFFFFF)>>>0; };
-
-    const localParts=[], centralParts=[];
-    let offset=0;
-
-    for(const f of files){
-      const nameBytes = encoder.encode(f.name);
-      const data = f.data instanceof Uint8Array ? f.data : new Uint8Array(f.data);
-      const crc = crc32(data);
-      const comp = data;
-      const compSize = comp.length, uncompSize = data.length;
-
-      const LFH = new Uint8Array(30 + nameBytes.length);
-      writeU32(LFH,0,0x04034b50); writeU16(LFH,4,20); writeU16(LFH,6,0); writeU16(LFH,8,0);
-      writeU16(LFH,10,0); writeU16(LFH,12,0);
-      writeU32(LFH,14,crc); writeU32(LFH,18,compSize); writeU32(LFH,22,uncompSize);
-      writeU16(LFH,26,nameBytes.length); writeU16(LFH,28,0);
-      LFH.set(nameBytes,30);
-
-      localParts.push(LFH, comp);
-      const localOffset = offset;
-      offset += LFH.length + comp.length;
-
-      const CDH = new Uint8Array(46 + nameBytes.length);
-      writeU32(CDH,0,0x02014b50); writeU16(CDH,4,20); writeU16(CDH,6,20); writeU16(CDH,8,0); writeU16(CDH,10,0);
-      writeU16(CDH,12,0); writeU16(CDH,14,0);
-      writeU32(CDH,16,crc); writeU32(CDH,20,compSize); writeU32(CDH,24,uncompSize);
-      writeU16(CDH,28,nameBytes.length); writeU16(CDH,30,0); writeU16(CDH,32,0);
-      writeU16(CDH,34,0); writeU16(CDH,36,0); writeU32(CDH,38,0);
-      writeU32(CDH,42,localOffset);
-      CDH.set(nameBytes,46);
-      centralParts.push(CDH);
-    }
-
-    const localLen = localParts.reduce((s,a)=> s + a.length, 0);
-    const centralLen = centralParts.reduce((s,a)=> s + a.length, 0);
-
-    const END = new Uint8Array(22);
-    writeU32(END,0,0x06054b50); writeU16(END,4,0); writeU16(END,6,0);
-    writeU16(END,8,centralParts.length); writeU16(END,10,centralParts.length);
-    writeU32(END,12,centralLen); writeU32(END,16,localLen); writeU16(END,20,0);
-
-    const all = new Uint8Array(localLen + centralLen + END.length);
-    let p=0; for(const part of localParts){ all.set(part,p); p+=part.length; }
-    for(const part of centralParts){ all.set(part,p); p+=part.length; }
-    all.set(END,p);
-
-    return new Blob([all], {type:'application/zip'});
-  }
-
-  // ✅ تثبيت واجهة "زحف تلقائي فقط"
-  txtLinks.readOnly = true;
-  txtLinks.placeholder = 'هنا تُعرض الروابط بعد الزحف ...';
-  resetCrawlProgress();
-</script>
 
 </body>
 </html>
